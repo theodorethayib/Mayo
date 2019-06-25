@@ -1,0 +1,29 @@
+Frequency 1-6
+	Patients 1-139
+		Time 1-44
+			Electrodes 1-72
+
+
+Start with patient 1, run through all times and plot electrodes
+
+Threshold currently at +-.2
+If above/below threshold then plot
+	When plotting, need to reference all_loc
+
+Start with one time first
+
+
+
+Create matrix: x value | y value | z value | power
+
+Different figure for each frequency band (displayed at once)
+Different figure for each time 
+
+Name figures as: FrequencyBand_ViewNumber_Time
+
+For each electrode
+
+
+
+
+14
