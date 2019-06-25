@@ -1,0 +1,7 @@
+-2 through 2 --> do not plot
+-2 through -5 --> light blue to dark blue
+2 thorugh 5 --> light red to dark red
+Set thresholds as variables
+
+
+Appears as if +-0.2 is the cutoff for if electrode is on or off
