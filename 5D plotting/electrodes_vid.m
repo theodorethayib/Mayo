@@ -60,7 +60,7 @@ for pNum = 1:number_of_patients
                 y = eLocation(eNum, 2);
                 z = eLocation(eNum, 3);
                 testnum = testnum + 1;
-                testmatrix = [testmatrix;eNum testvar pNum];
+                testmatrix = [testmatrix;eNum IPvalue pNum];
                 
                 if IPvalue > 0
                     color_value = max_threshold / IPvalue;
