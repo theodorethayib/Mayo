@@ -4,4 +4,3 @@
 Set thresholds as variables
 
 
-Appears as if +-0.2 is the cutoff for if electrode is on or off

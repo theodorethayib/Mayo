@@ -6,7 +6,7 @@ Frequency 1-6
 
 Start with patient 1, run through all times and plot electrodes
 
-Threshold currently at +-0.05
+Threshold currently at +-.2
 If above/below threshold then plot
 	When plotting, need to reference all_loc
 
@@ -24,6 +24,4 @@ Name figures as: FrequencyBand_ViewNumber_Time
 For each electrode
 
 
-
-
-14
+COLOR THRESHOLDS: -0.5, 05
