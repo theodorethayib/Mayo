@@ -56,7 +56,7 @@ for tNum = 1:number_of_time
 
     %         onoffvar = 1;
 
-            testmatrix = [testmatrix;eNum testvar onoffvar];
+%             testmatrix = [testmatrix;eNum testvar onoffvar];
 
             hold on;
             s = scatter3(x, y, z, sz, c, 'filled');
