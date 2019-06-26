@@ -1,8 +1,14 @@
+% VARIABLES
 number_of_frequencies = 1;
 number_of_patients = 1;
 numer_of_time = 1;
 number_of_electrodes = 72;
-% IPthreshold = .2
+IPthreshold = 0.05
+
+load('patients.mat');
+load('all_loc.mat');
+load('FINAL_AE2.mat');
+load('IPtime2.mat');
 
 % for tNum = 1:numer_of_time
 %     elec_test = getfield(IPtime2(patients{1}),'ip_all');
@@ -23,25 +29,31 @@ for eNum = 1:number_of_electrodes
     
     testvar = ePower(eNum, 1);
     
-    onoffvar = 0;
+%     onoffvar = 0;
     
-    if (ePower(eNum) >= 0.2) || (ePower(eNum) <= -.2)
+    if (ePower(eNum) >= IPthreshold) || (ePower(eNum) <= -IPthreshold)
         x = eLocation(eNum, 1);
         y = eLocation(eNum, 2);
         z = eLocation(eNum, 3);
         testnum = testnum + 1;
         
-        onoffvar = 1;
+%         onoffvar = 1;
+        
+        testmatrix = [testmatrix;eNum testvar onoffvar];
+        
+%         hold on;
+%         scatter3(x, y, z, 'filled');
     end
     
-    testmatrix = [testmatrix;eNum testvar onoffvar];
+%     testmatrix = [testmatrix;eNum testvar onoffvar];
     
     hold on;
     scatter3(x, y, z, 'filled');
 end
 
-hold off;
 
-view(-90, 0);
+% 
+% view(-90, 0);
 plot_brain;
 view(-90, 0);
+hold off;

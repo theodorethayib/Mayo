@@ -6,7 +6,7 @@ Frequency 1-6
 
 Start with patient 1, run through all times and plot electrodes
 
-Threshold currently at +-.2
+Threshold currently at +-0.05
 If above/below threshold then plot
 	When plotting, need to reference all_loc
 
