@@ -4,6 +4,11 @@ Frequency 1-6
 			Electrodes 1-72
 
 
+Frequency 1-6
+	Time 1-44
+		Patients 1-139
+			Electrodes 1-72
+
 Start with patient 1, run through all times and plot electrodes
 
 Threshold currently at +-.2
