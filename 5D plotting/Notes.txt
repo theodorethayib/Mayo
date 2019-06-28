@@ -4,3 +4,10 @@
 Set thresholds as variables
 
 
+Transparent electrodes/brain (.05?)
+Grey background
+Interpolation/Upsampling (interp1?)
+
+Show color scale at bottom(?) of the graph
+
+Work with tight_subplot for plotting

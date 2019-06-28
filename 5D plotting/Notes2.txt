@@ -1,15 +1,9 @@
 Frequency 1-6
-	Patients 1-139
-		Time 1-44
-			Electrodes 1-72
-
-
-Frequency 1-6
 	Time 1-44
 		Patients 1-139
 			Electrodes 1-72
 
-Start with patient 1, run through all times and plot electrodes
+Plot brain before electrodes - movie will be weird if not
 
 Threshold currently at +-.2
 If above/below threshold then plot
@@ -22,11 +16,7 @@ Start with one time first
 Create matrix: x value | y value | z value | power
 
 Different figure for each frequency band (displayed at once)
-Different figure for each time 
 
-Name figures as: FrequencyBand_ViewNumber_Time
+COLOR THRESHOLDS: -0.5, 0.5
 
-For each electrode
-
-
-COLOR THRESHOLDS: -0.5, 05
+What different views do we want?
