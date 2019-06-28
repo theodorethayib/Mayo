@@ -6,8 +6,18 @@ Set thresholds as variables
 
 Transparent electrodes/brain (.05?)
 Grey background
-Interpolation/Upsampling (interp1?)
+Interpolation/Upsampling (interp1?) (use either 3x or 4x interp?) --> Spline https://www.mathworks.com/help/matlab/ref/interp1.html
+
+Show when "word on" "word off" etc
 
 Show color scale at bottom(?) of the graph
 
 Work with tight_subplot for plotting
+
+How do we want the graphs labeled?
+
+Run program with all patients etc. over the weekend - review on Monday
+
+Maybe create a "config" file with all changable variables?
+
+Work on optimization
