@@ -4,20 +4,34 @@
 Set thresholds as variables
 
 
-Transparent electrodes/brain (.05?)
-Grey background
+Transparent electrodes/brain (.05?) (DONE is a variable - adjust as needed)
+Grey background (DONE)
+
 Interpolation/Upsampling (interp1?) (use either 3x or 4x interp?) --> Spline https://www.mathworks.com/help/matlab/ref/interp1.html
+https://www.mathworks.com/matlabcentral/answers/314146-interpolation-between-sequnce-of-images
 
 Show when "word on" "word off" etc
 
-Show color scale at bottom(?) of the graph
+Show color scale at bottom(?) of the graph --> Look at Colorbar
 
-Work with tight_subplot for plotting
+Work with tight_subplot for plotting (DONE)
 
 How do we want the graphs labeled?
 
-Run program with all patients etc. over the weekend - review on Monday
-
+Run program with all patients etc. 
 Maybe create a "config" file with all changable variables?
 
 Work on optimization
+
+INTERP:
+4 frames of fade-out while next picture fades in
+
+Use plot3 instead of scatter3? (Seems faster)
+	Look into transparency for makers (undocumented) --> http://undocumentedmatlab.com/blog/plot-markers-transparency-and-color-gradient
+		https://stackoverflow.com/questions/35069788/inconsistent-behavior-with-undocumented-matlab-figure-handles/35070679#35070679
+		Check how much slower it is with transparency vs without transparency (and see how it compares to scatter3 too)
+
+
+Maybe look into plotting all points at once vs for loop (storing location and color data in a 3d matrix - one for each frequency?)
+
+3,753,816 electrodes to look at total, 887,578 of which are plotted

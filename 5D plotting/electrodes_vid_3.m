@@ -2,9 +2,8 @@
 tic
 number_of_frequencies = 6;
 number_of_patients = 139;
-number_of_time = 44;
+number_of_time = 2;
 number_of_electrodes = 72;
-number_of_views = 1;
 IPthreshold = 0.05;
 frame_rate = 5;
 circle_size = 1;
@@ -36,7 +35,7 @@ load('all_loc.mat');
 load('FINAL_AE2.mat');
 load('IPtime2.mat');
 
-v = VideoWriter('VidExportPlot3Test6.avi');
+v = VideoWriter('VidExportPlot3Test5.avi');
 v.FrameRate = frame_rate;
 open(v);
 
@@ -102,9 +101,9 @@ for tNum = 1:number_of_time
         end
         elec_rows_matrix = [elec_rows_matrix;elec_rows];
     end
-%     ha = subtightplot((number_of_frequencies + 1), 1, [0.0 0.0]);
+    ha = tight_subplot((number_of_frequencies + 1), 1, [0.0 0.0], [0.0 0.0], [0.0 0.0]);
     
-    subtightplot(number_of_frequencies + 2, number_of_views, 1, [0.0 0.0]);
+    axes(ha(1));
     bar_graph = barh(tNum);
     ax = gca;
 %     axes('Position',[0 0 .5 .5]);
@@ -143,7 +142,7 @@ for tNum = 1:number_of_time
             row_for_this_frequency = elec_rows_matrix(subplot_num)
         end
         testvar = row_for_this_frequency + row_start;
-        subtightplot(number_of_frequencies+2, number_of_views, subplot_num + 1, [0.0 0.0]);
+        axes(ha(subplot_num + 1)); 
         plot_brain; 
         for row_number = row_start:(row_for_this_frequency + row_start - 1)
             markercolor = [elec_matrix(row_number,4) elec_matrix(row_number,5) elec_matrix(row_number,6)];
