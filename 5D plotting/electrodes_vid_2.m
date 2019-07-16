@@ -1,10 +1,10 @@
 % VARIABLES
 tic
 number_of_frequencies = 6;
-number_of_patients = 10;
-number_of_time = 20;
+number_of_patients = 139;
+number_of_time = 5;
 number_of_electrodes = 72;
-number_of_views = 1;
+number_of_views = 5;
 IPthreshold = 0.05;
 frame_rate = 5;
 circle_size = 1;
@@ -116,11 +116,11 @@ for tNum = 1:number_of_time
     end
 %     ha = subtightplot((number_of_frequencies + 1), 1, [0.0 0.0]);
     
-    subtightplot(number_of_frequencies + 2, number_of_views, 1, [0.0 0.0]);
+    subtightplot(number_of_frequencies + 2, number_of_views, [1 number_of_views], [0.0 0.0]);
     time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
 
     
-    subtightplot(number_of_frequencies+2, number_of_views, number_of_views * number_of_frequencies + number_of_views + 1, [0.0 0.0]);
+    subtightplot(number_of_frequencies+2, number_of_views, [number_of_views * number_of_frequencies + number_of_views + 1 number_of_views * number_of_frequencies + number_of_views + number_of_views], [0.0 0.0]);
     time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
 
     
@@ -140,15 +140,43 @@ for tNum = 1:number_of_time
             row_for_this_frequency = elec_rows_matrix(subplot_num)
         end
         testvar = row_for_this_frequency + row_start;
-        subtightplot(number_of_frequencies+2, number_of_views, subplot_num + 1, [0.0 0.0]);
+%         subtightplot(number_of_frequencies+2, number_of_views, subplot_num + 1, [0.0 0.0]);
 
         %         plot_brain; 
-        hold on;
-        plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-        axis('off'); view(-90,0); zoom(1);camlight;
-        set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100])
-        
-        for row_number = row_start:(row_for_this_frequency + row_start - 1)
+%         hold on;
+%         plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+%         axis('off'); view(-90,0); zoom(1);camlight;
+%         set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100])
+        for current_view = 1: number_of_views
+            subtightplot(number_of_frequencies+2, number_of_views, subplot_num * number_of_views + current_view, [0.0 0.0]);
+            
+            hold on;
+            switch current_view
+                case 1
+                    plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+                    view(-90,0);
+                case 2
+                    plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+                    view(90,0);
+                case 3
+                    plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+                    plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
+                    view(0,-90);
+                case 4
+                    plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
+                    view(90,0);
+                case 5
+                    plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
+                    view(-90,0);
+            end
+            axis('off');zoom(1);camlight;
+            set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100]);
+                
+
+                
+            
+            
+            for row_number = row_start:(row_for_this_frequency + row_start - 1)
             markercolor = [elec_matrix(row_number,4) elec_matrix(row_number,5) elec_matrix(row_number,6)];
             x = elec_matrix(row_number,1);
             y = elec_matrix(row_number,2);
@@ -156,10 +184,14 @@ for tNum = 1:number_of_time
             
             p = plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
             p.Color(4) = 0.3;
-        end
+            end
         ax2 = gca;
         ax2.TickLength = [0 0];
         axis('off');
+        
+        end
+        
+        
     end
     
 %     caxes1 = axes;
