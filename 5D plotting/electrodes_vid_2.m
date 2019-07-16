@@ -1,14 +1,19 @@
 % VARIABLES
 tic
 number_of_frequencies = 6;
-number_of_patients = 139;
-number_of_time = 44;
+number_of_patients = 10;
+number_of_time = 20;
 number_of_electrodes = 72;
 number_of_views = 1;
 IPthreshold = 0.05;
 frame_rate = 5;
 circle_size = 1;
 max_threshold = 0.5;
+
+word_on_time = 8;
+word_off_time = 37;
+
+vid_name = 'VidExportPBrainTest1.avi';
 
 transparency_var = 0.3;
 light_blue_color = [0.52 1 0.99];
@@ -36,7 +41,11 @@ load('all_loc.mat');
 load('FINAL_AE2.mat');
 load('IPtime2.mat');
 
-v = VideoWriter('VidExportPlot3Test6.avi');
+load('BRAIN_SCHEME.mat');
+vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
+fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
+
+v = VideoWriter(vid_name);
 v.FrameRate = frame_rate;
 open(v);
 
@@ -45,6 +54,9 @@ eLocation = all_loc(patients{1});
 figure(1);
 set(gcf,'color',fig_bg_color);
 set(gcf,'Renderer','OpenGL');
+
+
+ 
 
 for tNum = 1:number_of_time
     tNum
@@ -105,27 +117,12 @@ for tNum = 1:number_of_time
 %     ha = subtightplot((number_of_frequencies + 1), 1, [0.0 0.0]);
     
     subtightplot(number_of_frequencies + 2, number_of_views, 1, [0.0 0.0]);
-    bar_graph = barh(tNum);
-    ax = gca;
-%     axes('Position',[0 0 .5 .5]);
-    xlim([0 44]);
-    xticks([8 37]);
-%     xticklabels({'WORD ON','WORD OFF'});
-    yticks([]);
-    ax.TickDirMode = 'manual';
-    ax.TickDir = 'in';
-    ax.TickLength = [0.06 1];
-    ax.XAxisLocation = 'top';
-    set(gca,'Color',fig_bg_color);
-    ylim([0.75 1.25]);
-    text(8.5,1,'WORD ON','Color',fig_bg_color);
+    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
+
     
-    if tNum < 8 || tNum > 37
-        bar_graph.FaceColor = 'black';
-    else
-        bar_graph.FaceColor = 'red';
-    end
-    
+    subtightplot(number_of_frequencies+2, number_of_views, number_of_views * number_of_frequencies + number_of_views + 1, [0.0 0.0]);
+    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
+
     
     fprintf("PLOTTING")
     hold on;
@@ -144,7 +141,13 @@ for tNum = 1:number_of_time
         end
         testvar = row_for_this_frequency + row_start;
         subtightplot(number_of_frequencies+2, number_of_views, subplot_num + 1, [0.0 0.0]);
-        plot_brain; 
+
+        %         plot_brain; 
+        hold on;
+        plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+        axis('off'); view(-90,0); zoom(1);camlight;
+        set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100])
+        
         for row_number = row_start:(row_for_this_frequency + row_start - 1)
             markercolor = [elec_matrix(row_number,4) elec_matrix(row_number,5) elec_matrix(row_number,6)];
             x = elec_matrix(row_number,1);
@@ -158,7 +161,19 @@ for tNum = 1:number_of_time
         ax2.TickLength = [0 0];
         axis('off');
     end
-        
+    
+%     caxes1 = axes;
+%     cGrad1 = colorGradient(light_red_color, dark_red_color, 128);
+%     colormap(cGrad1);
+%     cBar1 = colorbar;
+%     set(cBar1, 'Position', [.8314 .545 .0581 .26]);
+%     
+%     caxes2 = axes;
+%     cGrad3 = colorGradient(dark_blue_color, light_blue_color, 128);
+%     colormap(cGrad3);
+%     cBar3 = colorbar;
+%     set(cBar3, 'Position', [.8314 .175 .0581 .26]); 
+
     hold off;
     fprintf("DONE PLOTTING")
     

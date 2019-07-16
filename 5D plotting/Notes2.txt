@@ -20,3 +20,27 @@ Different figure for each frequency band (displayed at once)
 COLOR THRESHOLDS: -0.5, 0.5
 
 What different views do we want?
+
+View 1: 
+plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+axis('off'); view(-90,0); zoom(1);
+
+View 2:
+plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+axis('off'); view(90,0); zoom(1);
+
+View 3:
+hold on;
+plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
+plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
+axis('off'); view(0,-90); zoom(1);
+camlight;
+hold off;
+
+View 4:
+plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
+axis('off'); view(90,0); zoom(1);
+
+View 5:
+plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
+axis('off'); view(-90,0); zoom(1);
