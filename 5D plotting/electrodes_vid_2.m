@@ -13,7 +13,7 @@ max_threshold = 0.5;
 word_on_time = 8;
 word_off_time = 37;
 
-vid_name = 'VidExportPBrainTest1.avi';
+vid_name = 'VidExportMultiViewTest1.avi';
 
 transparency_var = 0.3;
 light_blue_color = [0.52 1 0.99];
@@ -164,10 +164,10 @@ for tNum = 1:number_of_time
                     view(0,-90);
                 case 4
                     plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-                    view(90,0);
+                    view(-90,0);
                 case 5
                     plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-                    view(-90,0);
+                    view(90,0);
             end
             axis('off');zoom(1);camlight;
             set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100]);

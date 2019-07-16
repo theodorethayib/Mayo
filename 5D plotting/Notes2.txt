@@ -38,8 +38,8 @@ camlight;
 
 View 4:
 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-axis('off'); view(90,0); zoom(1);
+axis('off'); view(-90,0); zoom(1);
 
 View 5:
 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-axis('off'); view(-90,0); zoom(1);
+axis('off'); view(90,0); zoom(1);
