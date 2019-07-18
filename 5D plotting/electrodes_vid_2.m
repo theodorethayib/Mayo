@@ -17,7 +17,6 @@ word_off_time = 37;
 vid_name = 'VidExport_FINAL_1_6Freq_5View_44time_139patients.avi';
 
 % FREQUENCY LEGEND
-frequency_legend = '';
 f1 = '\theta_{l}       ';
 f2 = '\theta_{h}       ';
 f3 = '\alpha       ';
@@ -63,8 +62,6 @@ v = VideoWriter(vid_name);
 v.FrameRate = frame_rate;
 open(v);
 
-% eLocation = all_loc(patients{1});
-
 figure(1);
 set(gcf,'color',fig_bg_color);
 set(gcf,'Renderer','OpenGL');
@@ -80,14 +77,6 @@ time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
 imshow(CBar);
-
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, (number_of_views + 1) * 2);
-% CBarLegend1 = text(1,0,CBar1, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
-% CBarLegend2 = text(1,650,CBar2, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
-% CBarLegend3 = text(1, 900,CBar3, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
-% CBarLegend4 = text(1,1550,CBar4, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
-
-
 
 for subplot_num = 1:number_of_frequencies
     switch subplot_num
@@ -105,8 +94,6 @@ for subplot_num = 1:number_of_frequencies
             frequency_legend = f6;
     end
     for current_view = 1: number_of_views
-%         (number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view 
-%         (number_of_views + 1) * subplot_num * 3 + current_view
         subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,0);
 
         hold on;
@@ -156,8 +143,6 @@ for tNum = 1:number_of_time
             eLocation = all_loc(patients{pNum});
             elec_field = getfield(IPtime2(patients{pNum}),'ip_all');
 
-%             figure(1);
-%             set(gcf,'color',fig_bg_color);
             IPvalue_matrix = elec_field(:,fNum,tNum);
             eSize = size(IPvalue_matrix,1);
             eHemisphereFull = hemispheres(patients{pNum});
@@ -237,19 +222,9 @@ for tNum = 1:number_of_time
            row_for_this_frequency = elec_rows_matrix(1);
            row_start = 1; %what row the subplot should start on
         else
-%             row_start = elec_rows_matrix(subplot_num - 1) + 1
-            row_start = row_start + elec_rows_matrix(subplot_num - 1)
-%             row_for_this_frequency = row_start - elec_rows_matrix(subplot_num)
-            row_for_this_frequency = elec_rows_matrix(subplot_num)
+            row_start = row_start + elec_rows_matrix(subplot_num - 1);
+            row_for_this_frequency = elec_rows_matrix(subplot_num);
         end
-        testvar = row_for_this_frequency + row_start;
-%         subtightplot(number_of_frequencies+2, number_of_views, subplot_num + 1, [0.0 0.0]);
-
-        %         plot_brain; 
-%         hold on;
-%         plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%         axis('off'); view(-90,0); zoom(1);camlight;
-%         set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100])
         for current_view = 1: number_of_views
             subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,0);
             
@@ -315,24 +290,10 @@ for tNum = 1:number_of_time
             end
         ax2 = gca;
         ax2.TickLength = [0 0];
-        axis('off');
-        
+        axis('off');     
         end
-        
-        
+             
     end
-    
-%     caxes1 = axes;
-%     cGrad1 = colorGradient(light_red_color, dark_red_color, 128);
-%     colormap(cGrad1);
-%     cBar1 = colorbar;
-%     set(cBar1, 'Position', [.8314 .545 .0581 .26]);
-%     
-%     caxes2 = axes;
-%     cGrad3 = colorGradient(dark_blue_color, light_blue_color, 128);
-%     colormap(cGrad3);
-%     cBar3 = colorbar;
-%     set(cBar3, 'Position', [.8314 .175 .0581 .26]); 
 
     hold off;
     fprintf("DONE PLOTTING")
