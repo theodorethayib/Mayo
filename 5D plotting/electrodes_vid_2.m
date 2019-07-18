@@ -1,30 +1,32 @@
 % VARIABLES
 tic
 number_of_frequencies = 6;
-number_of_patients = 2;
-number_of_time = 2;
+number_of_patients = 139;
+number_of_time = 44;
 number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 8;
-IPthreshold = 0.05;
 frame_rate = 5;
 circle_size = 1;
-max_threshold = 0.5;
+min_ip_threshold = 0.05;
+max_ip_threshold = 0.5;
 
 word_on_time = 8;
 word_off_time = 37;
 
-vid_name = 'VidExportCBAR.avi';
-
-frequency_legend = '';
+vid_name = 'VidExport_FINAL_1_6Freq_5View_44time_139patients.avi';
 
 % FREQUENCY LEGEND
-f1 = '\theta_{l}        ';
-f2 = '\theta_{h}        ';
-f3 = '\alpha        ';
-f4 = '\beta        ';
-f5 = '\gamma_{l}        ';
-f6 = '\gamma_{h}        ';
+frequency_legend = '';
+f1 = '\theta_{l}       ';
+f2 = '\theta_{h}       ';
+f3 = '\alpha       ';
+f4 = '\beta       ';
+f5 = '\gamma_{l}       ';
+f6 = '\gamma_{h}       ';
+
+CBarFontSize = 8;
+CBarFontColor = [0.3 0.3 0.3];
 
 transparency_var = 0.3;
 light_blue_color = [0.52 1 0.99];
@@ -73,12 +75,19 @@ CBar = imread('Colorbar.png');
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-
-subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 1 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [0.0 0.0],0,0);
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
 imshow(CBar);
+
+% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, (number_of_views + 1) * 2);
+% CBarLegend1 = text(1,0,CBar1, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
+% CBarLegend2 = text(1,650,CBar2, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
+% CBarLegend3 = text(1, 900,CBar3, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
+% CBarLegend4 = text(1,1550,CBar4, 'FontSize', CBarFontSize, 'Color', CBarFontColor);
+
+
 
 for subplot_num = 1:number_of_frequencies
     switch subplot_num
@@ -156,13 +165,13 @@ for tNum = 1:number_of_time
                     for eNum = 1:eSize
                         IPvalue = IPvalue_matrix(eNum, 1);
 
-                        if (IPvalue_matrix(eNum) >= IPthreshold) || (IPvalue_matrix(eNum) <= -IPthreshold)
+                        if (IPvalue_matrix(eNum) >= min_ip_threshold) || (IPvalue_matrix(eNum) <= -min_ip_threshold)
                             x = eLocation(eNum, 1);
                             y = eLocation(eNum, 2);
                             z = eLocation(eNum, 3);
                             
                             if IPvalue > 0
-                                color_value = IPvalue / max_threshold;
+                                color_value = IPvalue / max_ip_threshold;
                                 if color_value > 1
                                     color_value = 1;
                                 end    
@@ -172,7 +181,7 @@ for tNum = 1:number_of_time
 
                                 c = [red_color blue_color green_color];	
                             else
-                                color_value = IPvalue / -max_threshold;
+                                color_value = IPvalue / -max_ip_threshold;
                                 if color_value > 1
                                     color_value = 1;
                                 end   
@@ -198,10 +207,10 @@ for tNum = 1:number_of_time
     time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
 
 
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 1 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
     time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
 
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [0.0 0.0],0,0);
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
     imshow(CBar);
 
     
