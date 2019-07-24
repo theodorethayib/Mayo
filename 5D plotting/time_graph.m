@@ -15,7 +15,7 @@ bar_graph = barh(tNum);
 %     ax.XAxisLocation = 'bottom';
     set(gca,'Color',fig_bg_color);
     ylim([0.75 1.25]);
-    text(word_on + 0.5,1,'WORD ON','Color',fig_bg_color);
+    text(word_on + 0.5,1,'WORD ON','Color',fig_bg_color,'FontSize',24);
     
     if tNum < 8 || tNum > 37
         bar_graph.FaceColor = [0.2 0.2 0.2];

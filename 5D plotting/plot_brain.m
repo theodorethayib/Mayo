@@ -9,5 +9,5 @@ axis('off'); view(-90,0); zoom(1);
 % axis('auto x', 'auto yz');
 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
 set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100])
-% axis('on');
+% axis('on');   
 % You’ll have to zoom out and choose your view 

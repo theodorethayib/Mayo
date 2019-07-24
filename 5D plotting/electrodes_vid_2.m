@@ -11,9 +11,11 @@ circle_size = 1;
 min_ip_threshold = 0.05;
 max_ip_threshold = 0.5;
 
+%TIME FOR WHEN WORD IS ON/OFF
 word_on_time = 8;
 word_off_time = 37;
 
+%NAME OF VIDEO EXPORT
 vid_name = 'VidExport_FINAL_1_6Freq_5View_44time_139patients.avi';
 
 % FREQUENCY LEGEND
@@ -24,9 +26,7 @@ f4 = '\beta       ';
 f5 = '\gamma_{l}       ';
 f6 = '\gamma_{h}       ';
 
-CBarFontSize = 8;
-CBarFontColor = [0.3 0.3 0.3];
-
+% VARIABLES FOR COLORS FOR ELECTRODES AND FIGURE BACKGROUND
 transparency_var = 0.3;
 light_blue_color = [0.52 1 0.99];
 dark_blue_color = [0.14 0 0.34];
@@ -48,37 +48,45 @@ redBlueColorTwo = dark_red_color(2) - redBlueColorOne;
 redGreenColorOne = (dark_red_color(3) - light_red_color(3)) / 0.9;
 redGreenColorTwo = dark_red_color(3) - redGreenColorOne;
 
+%LOADS ALL REQUIRED DATA FOR ELECTRODES AND BRAIN PLOTTING
 load('patients.mat');
 load('all_loc.mat');
 load('FINAL_AE2.mat');
 load('IPtime2.mat');
 load('hemispheres.mat');
-
 load('BRAIN_SCHEME.mat');
 vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
 fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
 
+%LOADS COLORBAR PICTURE
+CBar = imread('Colorbar.png');
+
+%PREPARES VIDEO WRITER
 v = VideoWriter(vid_name);
 v.FrameRate = frame_rate;
 open(v);
 
+%CREATES FIGURE, SETS BG COLOR, AND SETS MATLAB TO USE GPU
 figure(1);
 set(gcf,'color',fig_bg_color);
 set(gcf,'Renderer','OpenGL');
 
-CBar = imread('Colorbar.png');
-
 % EMPTY FRAMES AT BEGINNING OF VIDEO
+% UPPER TIME GRAPH
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
+% LOWER TIME GRAPH
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
+% COLORBAR
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
 imshow(CBar);
 
+% PLOTS EMPTY BRAIN PICTURES
 for subplot_num = 1:number_of_frequencies
+%     TEXT FOR BRAIN FREQUENCY LEGEND
     switch subplot_num
         case 1
             frequency_legend = f1;
@@ -93,6 +101,7 @@ for subplot_num = 1:number_of_frequencies
         case 6
             frequency_legend = f6;
     end
+%     PLOTS BRAIN FOR EACH OF THE 5 VIEWS
     for current_view = 1: number_of_views
         subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,0);
 
@@ -122,6 +131,7 @@ for subplot_num = 1:number_of_frequencies
     end
 end
 hold off;
+% SAVES number_of_empty_frames FRAMES OF THE EMPTY BRAIN TO THE VIDEO
 for empty_plot = 1:number_of_empty_frames  
     frame = getframe(gcf);
     writeVideo(v,frame);
@@ -129,7 +139,7 @@ end
 
 clf;
  
-
+% LOOPS FOR ELECTRODES
 for tNum = 1:number_of_time
     tNum
 
@@ -149,7 +159,10 @@ for tNum = 1:number_of_time
 
                     for eNum = 1:eSize
                         IPvalue = IPvalue_matrix(eNum, 1);
-
+                        
+%                         CHECKS TO SEE IF ELECTRODE IS WITHIN THE IP
+%                         THRESHOLDS. IGNORES ELECTRODES THAT ARE NOT
+%                         WITHIN THE THRESHOLDS.
                         if (IPvalue_matrix(eNum) >= min_ip_threshold) || (IPvalue_matrix(eNum) <= -min_ip_threshold)
                             x = eLocation(eNum, 1);
                             y = eLocation(eNum, 2);
@@ -250,8 +263,7 @@ for tNum = 1:number_of_time
                     view(90,0);
             end
             axis('off');zoom(1);camlight;
-            set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100]);
-                
+            set(gca,'FontSize',20,'YLim',[-125 100],'ZLim',[-75 100]); 
 
             if current_view == 2
                 for row_number = row_start:(row_for_this_frequency + row_start - 1)
