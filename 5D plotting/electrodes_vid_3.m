@@ -1,8 +1,15 @@
+% Code for plotting electrodes onto the brain.
+
+% Requires the following files: patients.mat, all_loc.mat, FINAL_AE2.mat,
+% IPtime2.mat, hemispheres.mat, BRAIN_SCHEME.mat, 
+% fread3.m, plot3_wrapper.m, plotsurf_wrapper.m, read_surf_wrapper.m, 
+% read_surf.m, render_freesurfer3D.m, time_graph.m, and Colorbar_new3.png.
+
 % VARIABLES
 tic %Tracks how long the code runs for
 number_of_frequencies = 6;
-number_of_patients = 1;
-number_of_time = 1;
+number_of_patients = 139;
+number_of_time = 44;
 number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
@@ -11,19 +18,19 @@ circle_size = 3;
 min_ip_threshold = 0.05;
 max_ip_threshold = 0.5;
 
-%TIME FOR WHEN WORD IS ON/OFF
+% Time for when word is on/off during the test.
 word_on_time = 8;
 word_off_time = 37;
 
-%NAME OF VIDEO EXPORT
-vid_name = 't2.avi';
+% Name of the exported video.
+vid_name = 'VidExport_FINAL_4_6Freq_5View_44time_139patients.avi';
 
 % Set save_picture to 1 if you want each time-frame to be saved to a png
 % file. Set folder pictures to be saved in to pic_export_folder
 save_picture = 0;
 pic_export_folder = '5D plotting\pic_exports';
 
-% FREQUENCY LEGEND
+% Frequency legend text.
 f1 = '\theta_{L}                ';
 f2 = '\theta_{H}                ';
 f3 = '\alpha                 ';
@@ -31,22 +38,22 @@ f4 = '\beta                  ';
 f5 = '\gamma_{L}                ';
 f6 = '\gamma_{H}                ';
 
-font_size = 32;
+font_size = 32; %Frequency legend text font size
 
 
-% VARIABLES FOR COLORS FOR ELECTRODES AND FIGURE BACKGROUND (RGB TRIPLETS)
-% NOTE THAT THE COLOR BAR IS A PNG FILE (EDITED THROUGH THE
-% COLORBAR_NEW2.PSD PHOTOSHOP FILE)- IF THE COLORS ARE CHANGED HERE, THEY
-% NEED TO BE MANUALLY CHANGED WITHIN THE PHOTOSHOP FILE AS WELL (GRADIENT
-% TOOL).
-% transparency_var = 0.3; - THIS IS DOING NOTHING RIGHT NOW
+% Variables for colors, electrodes, and figure background (RGB triplets)
+% Note that the colorbar is a png file (edited through the 
+% colorbar_new2.psd photoshop file) - if the colors are changed here, they
+% need to be manually changed within the photoshop file as well (gradient
+% tool).
 light_blue_color = [0.52 1 0.99];
 dark_blue_color = [0.14 0 0.34];
 light_red_color = [0.99 0.89 0.01];
 dark_red_color = [0.36 0 0.11];
 fig_bg_color = [0.8 0.8 0.8];
 
-% CALCULATIONS FOR THE RGB TRIPLETS FOR THE DARK AND LIGHT BLUE
+% Calculations for the darkest and lightest blue colors for the electrode
+% markers (RGB triplets).
 blueRedColorOne = (dark_blue_color(1) - light_blue_color(1)) / 0.9;
 blueRedColorTwo = dark_blue_color(1) - blueRedColorOne;
 blueBlueColorOne = (dark_blue_color(2) - light_blue_color(2)) / 0.9;
@@ -54,7 +61,8 @@ blueBlueColorTwo = dark_blue_color(2) - blueBlueColorOne;
 blueGreenColorOne = (dark_blue_color(3) - light_blue_color(3)) / 0.9;
 blueGreenColorTwo = dark_blue_color(3) - blueGreenColorOne;
 
-% CALCULATIONS FOR THE RGB TRIPLETS FOR THE DARK AND LIGHT RED
+% Calculations for the darkest and lightest red colors for the electrode
+% markers (RGB triplets).
 redRedColorOne = (dark_red_color(1) - light_red_color(1)) / 0.9;
 redRedColorTwo = dark_red_color(1) - redRedColorOne;
 redBlueColorOne = (dark_red_color(2) - light_red_color(2)) / 0.9;
@@ -62,7 +70,7 @@ redBlueColorTwo = dark_red_color(2) - redBlueColorOne;
 redGreenColorOne = (dark_red_color(3) - light_red_color(3)) / 0.9;
 redGreenColorTwo = dark_red_color(3) - redGreenColorOne;
 
-%LOADS ALL REQUIRED DATA FOR ELECTRODES AND BRAIN PLOTTING
+% Loads all the required data for electrodes and brain plotting.
 load('patients.mat');
 load('all_loc.mat');
 load('FINAL_AE2.mat');
@@ -72,37 +80,34 @@ load('BRAIN_SCHEME.mat');
 vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
 fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
 
-%LOADS COLORBAR PICTURE
+% Loads the colorbar picture
 CBar = imread('Colorbar_new3.png');
 
-%PREPARES VIDEO WRITER
+% Prepares the video file
 v = VideoWriter(vid_name);
 v.FrameRate = frame_rate;
 open(v);
 
-%CREATES FIGURE, SETS FIGURE TO MAXIMIZED, SETS BG COLOR, AND SETS MATLAB TO USE GPU
+% Creates a maximized figure with the background color specified above, and
+% sets matlab to use OpenGL.
 f = figure(1);
-f.WindowState = 'maximized';
-set(gcf,'units','normalized','outerposition',[0 0 1 1])
-set(gcf,'color',fig_bg_color);
-set(gcf,'InvertHardcopy','off');
-set(gcf,'Renderer','OpenGL');
+set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'WindowState','maximized','InvertHardcopy','off','Renderer','OpenGL')
 
 % EMPTY FRAMES AT BEGINNING OF VIDEO
-% UPPER TIME GRAPH
+% Upper time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-% LOWER TIME GRAPH
+% Lower time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-% COLORBAR
+% Colorbar
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);imshow(CBar);
 
-% PLOTS EMPTY BRAIN PICTURES
+% Plots empty brain pictures
 for subplot_num = 1:number_of_frequencies
-%     TEXT FOR BRAIN FREQUENCY LEGEND
+%     Text for the frequency legend
     switch subplot_num
         case 1
             frequency_legend = f1;
@@ -117,7 +122,7 @@ for subplot_num = 1:number_of_frequencies
         case 6
             frequency_legend = f6;
     end
-%     PLOTS BRAIN FOR EACH OF THE 5 VIEWS
+%   Plots brains in the correct views
     for current_view = 1: number_of_views
         subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,[0.1 0]);
 
@@ -126,8 +131,7 @@ for subplot_num = 1:number_of_frequencies
             case 1
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                 view(-90,0);
-                h = text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold');
-                h.HorizontalAlignment = 'right';
+                text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
             case 2
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                 view(90,0);
@@ -147,7 +151,8 @@ for subplot_num = 1:number_of_frequencies
     end
 end
 hold off;
-% SAVES number_of_empty_frames FRAMES OF THE EMPTY BRAIN TO THE VIDEO
+% Saves number_of_empty_frames frames of the empty brain to the beginning
+% of the video.
 for empty_plot = 1:number_of_empty_frames  
     frame = getframe(gcf);
     writeVideo(v,frame);
@@ -183,9 +188,9 @@ for tNum = 1:number_of_time
                     for eNum = 1:eSize
                         IPvalue = IPvalue_matrix(eNum, 1);
                         
-%                         CHECKS TO SEE IF ELECTRODE IS WITHIN THE IP
-%                         THRESHOLDS. IGNORES ELECTRODES THAT ARE NOT
-%                         WITHIN THE THRESHOLDS.
+%                         Checks to see if the electrode is within the IP
+%                         threhsolds set above. Ignores electrodes that are
+%                         not within the thresholds.
                         if (IPvalue_matrix(eNum) >= min_ip_threshold) || (IPvalue_matrix(eNum) <= -min_ip_threshold)
                             x = eLocation(eNum, 1);
                             y = eLocation(eNum, 2);
@@ -201,8 +206,6 @@ for tNum = 1:number_of_time
                                 red_color = color_value * redRedColorOne + redRedColorTwo;
                                 blue_color = color_value * redBlueColorOne + redBlueColorTwo;
                                 green_color = color_value * redGreenColorOne + redGreenColorTwo;
-
-                                c = [red_color blue_color green_color];	
                             else
                                 color_value = IPvalue / -max_ip_threshold;
                                 if color_value > 1
@@ -211,10 +214,10 @@ for tNum = 1:number_of_time
                                 red_color = color_value * blueRedColorOne + blueRedColorTwo;
                                 blue_color = color_value * blueBlueColorOne + blueBlueColorTwo;
                                 green_color = color_value * blueGreenColorOne + blueGreenColorTwo;
-
-                                c = [red_color blue_color green_color];
                             end
-%                             What hemispehre the electrodes are in
+                            
+                            c = [red_color blue_color green_color];
+%                             Saves what hemispehre the electrodes are in
                             eHemisphere = eHemisphereFull(eNum);
                             patient_matrix = [x y z c eHemisphere];
                             
@@ -229,20 +232,22 @@ for tNum = 1:number_of_time
         end
         elec_rows_matrix = [elec_rows_matrix;elec_rows];
     end
-    % UPPER TIME GRAPH
+    % Upper time graph
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
     time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-    % LOWER TIME GRAPH
+    % Lower time graph
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
     time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-    % COLORBAR
+    % Colorbar
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);    imshow(CBar);
     
     hold on;
     
 %     Brain graphs
+%     subplot_num is for the rows of the plots (1 is the first brain plot,
+%     etc)
     for subplot_num = 1:number_of_frequencies 
         switch subplot_num
             case 1
@@ -277,8 +282,7 @@ for tNum = 1:number_of_time
                 case 1
                     plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                     view(-90,0);
-                    h = text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold');
-                    h.HorizontalAlignment = 'right';
+                    text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
                 case 2
                     plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                     view(90,0);
@@ -306,7 +310,6 @@ for tNum = 1:number_of_time
                         z = elec_matrix(row_number,3);
 
                         p = plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-%                         p.Color(4) = 0.3; I think this line does nothing?
                     end
                 end
             elseif current_view >= 4
@@ -317,8 +320,7 @@ for tNum = 1:number_of_time
                         y = elec_matrix(row_number,2);
                         z = elec_matrix(row_number,3);
 
-                        p = plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-%                         p.Color(4) = 0.3; I think this line does nothing?
+                        plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
                     end
                 end
             else        
@@ -328,13 +330,9 @@ for tNum = 1:number_of_time
                     y = elec_matrix(row_number,2);
                     z = elec_matrix(row_number,3);
 
-                    p = plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-%                     p.Color(4) = 0.3; I think this line does nothing?
+                    plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
                 end
             end
-        ax2 = gca;
-        ax2.TickLength = [0 0];
-        axis('off');     
         end      
     end
     hold off;
@@ -353,20 +351,20 @@ for tNum = 1:number_of_time
 end
 
 % EMPTY FRAMES AT THE END OF VIDEO
-% UPPER TIME GRAPH
+% Upper time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-% LOWER TIME GRAPH
+% Lower time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-% COLORBAR
+% Colorbar
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
 imshow(CBar);
-% PLOTS EMPTY BRAIN PICTURES
+% Plots empty brain pictures.
 for subplot_num = 1:number_of_frequencies
-%     TEXT FOR BRAIN FREQUENCY LEGEND
+%     Text for the frequency legend.
     switch subplot_num
         case 1
             frequency_legend = f1;
@@ -381,7 +379,7 @@ for subplot_num = 1:number_of_frequencies
         case 6
             frequency_legend = f6;
     end
-%     PLOTS BRAIN FOR EACH OF THE 5 VIEWS
+%   Plots brains in the correct views
     for current_view = 1: number_of_views
         subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,[0.1 0]);
 
@@ -390,8 +388,7 @@ for subplot_num = 1:number_of_frequencies
             case 1
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                 view(-90,0);
-                h = text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold');
-                h.HorizontalAlignment = 'right';
+                text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
             case 2
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                 view(90,0);
@@ -411,7 +408,8 @@ for subplot_num = 1:number_of_frequencies
     end
 end
 hold off;
-% SAVES number_of_empty_frames FRAMES OF THE EMPTY BRAIN TO THE VIDEO
+% Saves number_of_empty_frames frames of the empty brain to the end of the
+% video.
 for empty_plot = 1:number_of_empty_frames  
     frame = getframe(gcf);
     writeVideo(v,frame);
@@ -419,6 +417,6 @@ end
 
 clf;
 
-hold off;
+% Closes the video writer.
 close(v);
 toc %Tracks how long the code runs for
