@@ -1,8 +1,8 @@
 % VARIABLES
 tic %Tracks how long the code runs for
 number_of_frequencies = 6;
-number_of_patients = 139;
-number_of_time = 44;
+number_of_patients = 1;
+number_of_time = 1;
 number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
@@ -16,25 +16,27 @@ word_on_time = 8;
 word_off_time = 37;
 
 %NAME OF VIDEO EXPORT
-vid_name = 'VidExport_FINAL_3_6Freq_5View_44time_139patients.avi';
+vid_name = 't2.avi';
 
 % Set save_picture to 1 if you want each time-frame to be saved to a png
 % file. Set folder pictures to be saved in to pic_export_folder
-save_picture = 1;
+save_picture = 0;
 pic_export_folder = '5D plotting\pic_exports';
 
 % FREQUENCY LEGEND
-f1 = '\theta_{L}                      ';
-f2 = '\theta_{H}                      ';
-f3 = '\alpha                       ';
-f4 = '\beta                       ';
-f5 = '\gamma_{L}                      ';
-f6 = '\gamma_{H}                      ';
+f1 = '\theta_{L}                ';
+f2 = '\theta_{H}                ';
+f3 = '\alpha                 ';
+f4 = '\beta                  ';
+f5 = '\gamma_{L}                ';
+f6 = '\gamma_{H}                ';
+
+font_size = 32;
 
 
 % VARIABLES FOR COLORS FOR ELECTRODES AND FIGURE BACKGROUND (RGB TRIPLETS)
 % NOTE THAT THE COLOR BAR IS A PNG FILE (EDITED THROUGH THE
-% COLORBAR_NEW.PSD PHOTOSHOP FILE)- IF THE COLORS ARE CHANGED HERE, THEY
+% COLORBAR_NEW2.PSD PHOTOSHOP FILE)- IF THE COLORS ARE CHANGED HERE, THEY
 % NEED TO BE MANUALLY CHANGED WITHIN THE PHOTOSHOP FILE AS WELL (GRADIENT
 % TOOL).
 % transparency_var = 0.3; - THIS IS DOING NOTHING RIGHT NOW
@@ -78,7 +80,7 @@ v = VideoWriter(vid_name);
 v.FrameRate = frame_rate;
 open(v);
 
-%CREATES FIGURE, SETS BG COLOR, AND SETS MATLAB TO USE GPU
+%CREATES FIGURE, SETS FIGURE TO MAXIMIZED, SETS BG COLOR, AND SETS MATLAB TO USE GPU
 f = figure(1);
 f.WindowState = 'maximized';
 set(gcf,'units','normalized','outerposition',[0 0 1 1])
@@ -96,8 +98,7 @@ subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_vie
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
 % COLORBAR
-subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
-imshow(CBar);
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);imshow(CBar);
 
 % PLOTS EMPTY BRAIN PICTURES
 for subplot_num = 1:number_of_frequencies
@@ -125,7 +126,7 @@ for subplot_num = 1:number_of_frequencies
             case 1
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                 view(-90,0);
-                h = text(-3,2,frequency_legend, 'FontSize', 18);
+                h = text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold');
                 h.HorizontalAlignment = 'right';
             case 2
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
@@ -228,17 +229,16 @@ for tNum = 1:number_of_time
         end
         elec_rows_matrix = [elec_rows_matrix;elec_rows];
     end
-%     UPPER TIME GRAPH
+    % UPPER TIME GRAPH
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
+    time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-%     LOWER TIME GRAPH
+    % LOWER TIME GRAPH
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
+    time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
-%     COLORBAR
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
-    imshow(CBar);
+    % COLORBAR
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);    imshow(CBar);
     
     hold on;
     
@@ -277,7 +277,7 @@ for tNum = 1:number_of_time
                 case 1
                     plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                     view(-90,0);
-                    h = text(-3,2,frequency_legend, 'FontSize', 18);
+                    h = text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold');
                     h.HorizontalAlignment = 'right';
                 case 2
                     plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
@@ -362,7 +362,7 @@ subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_vie
 time_graph(0, fig_bg_color, word_on_time, word_off_time);
 
 % COLORBAR
-subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 2 (number_of_views + 1) * (number_of_frequencies * 3 + 1)], [],[],[0.2 0.02]);
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
 imshow(CBar);
 % PLOTS EMPTY BRAIN PICTURES
 for subplot_num = 1:number_of_frequencies
@@ -390,7 +390,7 @@ for subplot_num = 1:number_of_frequencies
             case 1
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                 view(-90,0);
-                h = text(-3,2,frequency_legend);
+                h = text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold');
                 h.HorizontalAlignment = 'right';
             case 2
                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
