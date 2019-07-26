@@ -24,11 +24,11 @@ word_on_time = 8;
 word_off_time = 37;
 
 % Name of the exported video.
-vid_name = 'VidExport_FINAL_4_6Freq_5View_44time_139patients.avi';
+vid_name = 'VidExport_FINAL_5_6Freq_5View_44time_139patients.avi';
 
 % Set save_picture to 1 if you want each time-frame to be saved to a png
 % file. Set folder pictures to be saved in to pic_export_folder
-save_picture = 1;
+save_picture = 0;
 pic_export_folder = '5D plotting\pic_exports';
 
 % Frequency legend text.
@@ -40,7 +40,6 @@ f5 = '\gamma_{L}                ';
 f6 = '\gamma_{H}                ';
 
 font_size = 32; %Frequency legend text font size
-
 
 % Variables for colors, electrodes, and figure background (RGB triplets)
 % Note that the colorbar is a png file (edited through the
@@ -97,11 +96,11 @@ set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'Win
 % EMPTY FRAMES AT BEGINNING OF VIDEO 
 % Upper time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-time_graph(0, fig_bg_color, word_on_time, word_off_time);
+time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
 
 % Lower time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-time_graph(0, fig_bg_color, word_on_time, word_off_time);
+time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
 
 % Colorbar
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);imshow(CBar);
@@ -234,11 +233,11 @@ for tNum = 1:number_of_time
     end
     % Upper time graph
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
+    time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
     
     % Lower time graph
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
+    time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
     
     % Colorbar
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);    imshow(CBar);
@@ -352,11 +351,11 @@ end
 % EMPTY FRAMES AT THE END OF VIDEO 
 % Upper time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-time_graph(0, fig_bg_color, word_on_time, word_off_time);
+time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
 
 % Lower time graph
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-time_graph(0, fig_bg_color, word_on_time, word_off_time);
+time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
 
 % Colorbar
 subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);

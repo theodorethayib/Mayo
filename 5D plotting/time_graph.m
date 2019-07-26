@@ -1,10 +1,10 @@
-function tGraph = time_graph(tNum, fig_bg_color, word_on, word_off)
+function tGraph = time_graph(tNum, total_time, fig_bg_color, word_on, word_off)
     %TIME_GRAPH Bar graph that shows current time of the figure.
     %   Takes an input of the time to be shown, the figure background color,
     %   and the word and off times (for tickm marks)
     bar_graph = barh(tNum);
     ax = gca;
-    xlim([0 44]);
+    xlim([0 total_time]);
     xticks([word_on word_off]);
     xticklabels({'',''});
     yticks([]);
