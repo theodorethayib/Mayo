@@ -234,11 +234,11 @@ for tNum = 1:number_of_time
     end
     % Upper time graph
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-    time_graph(0, fig_bg_color, word_on_time, word_off_time);
+    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
     
     % Lower time graph
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-    time_graph(0, fig_bg_color, word_on_time, word_off_time);
+    time_graph(tNum, fig_bg_color, word_on_time, word_off_time);
     
     % Colorbar
     subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);    imshow(CBar);
