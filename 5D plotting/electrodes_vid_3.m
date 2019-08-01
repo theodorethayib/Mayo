@@ -8,9 +8,9 @@
 
 % VARIABLES
 tic %Tracks how long the code runs for
-number_of_frequencies = 6;
-number_of_patients = 139;
-number_of_time = 44;
+number_of_frequencies = 1;
+number_of_patients = 1;
+number_of_time = 1;
 number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
@@ -24,7 +24,7 @@ word_on_time = 8;
 word_off_time = 37;
 
 % Name of the exported video.
-vid_name = 'VidExport_FINAL_5_6Freq_5View_44time_139patients.avi';
+vid_name = 't2.avi';
 
 % Set save_picture to 1 if you want each time-frame to be saved to a png
 % file. Set folder pictures to be saved in to pic_export_folder
