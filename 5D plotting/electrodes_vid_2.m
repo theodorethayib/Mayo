@@ -9,7 +9,7 @@
 % VARIABLES
 tic %Tracks how long the code runs for
 number_of_frequencies = 1;
-number_of_patients = 1;
+number_of_patients = 10;
 number_of_time = 1;
 number_of_electrodes = 72;
 number_of_views = 5;
@@ -90,7 +90,7 @@ open(v);
 
 % Creates a maximized figure with the background color specified above, and
 % sets matlab to use OpenGL.
-f = figure(1);
+f = figure(1000);
 set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'WindowState','maximized','InvertHardcopy','off','Renderer','OpenGL')
 % 
 % % EMPTY FRAMES AT BEGINNING OF VIDEO 
@@ -414,7 +414,7 @@ end
 %     writeVideo(v,frame);
 % end
 
-clf;
+% clf;
 % Closes the video writer.
 close(v);
 toc % Tracks how long the code runs for
