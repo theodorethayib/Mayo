@@ -7,7 +7,18 @@ load('BRAIN_SCHEME.mat');
 vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
 fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
 
-plotThreshold = 5; % Was 4. Trying 3.
+number_of_frequencies = 1;
+number_of_patients = 1;
+number_of_time = 1;
+% number_of_electrodes = 72;
+number_of_views = 5;
+number_of_empty_frames = 4;
+frame_rate = 5;
+circle_size = 3;
+min_ip_threshold = 0.05;
+max_ip_threshold = 0.5;
+
+plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distance)
 
 colMatrixLeft = NaN(size(vL,1),1);
 colMatrixRight = NaN(size(vR,1),1);
@@ -22,7 +33,7 @@ for pNum = 1: 139
     eSize = size(IPvalue_matrix,1);
     for eNum = 1:eSize
         IPvalue = IPvalue_matrix(eNum, 1);
-        if IPvalue > 0.05 || IPvalue < -0.05
+        if IPvalue > min_ip_threshold || IPvalue < min_ip_threshold
             IPvalue = IPvalue * 2;
             if IPvalue >= 1
                 IPvalue = 0.99;
@@ -67,10 +78,10 @@ end
 colMatrixLeft(:,1) = colAvgLeft(:,1) ./ colAvgLeft(:,2);
 colMatrixRight(:,1) = colAvgRight(:,1) ./ colAvgRight(:,2);
 % subtightplot(8,5,1);
-% vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,1,[-90 0],1,0);
+% vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[-90 0],1,0);
 % subtightplot(8,5,5);
 % figure(2);
-% vertex3d_withAvailROI(vR,fR,[],colMatrixRight,1,[90 0],1,0);
+% vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[90 0],1,0);
 fprintf('Done with everything!')
 
 % camlight;

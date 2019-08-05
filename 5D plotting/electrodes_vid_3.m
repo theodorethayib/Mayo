@@ -11,7 +11,7 @@ tic %Tracks how long the code runs for
 number_of_frequencies = 1;
 number_of_patients = 1;
 number_of_time = 1;
-number_of_electrodes = 72;
+% number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
 frame_rate = 5;

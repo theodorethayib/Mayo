@@ -1,0 +1,2 @@
+Plot during every frequency loop, but only save on every time loop?
+Views plotting is already dealt with in the main plotting function
