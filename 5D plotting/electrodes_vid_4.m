@@ -78,7 +78,7 @@ end
 colMatrixLeft(:,1) = colAvgLeft(:,1) ./ colAvgLeft(:,2);
 colMatrixRight(:,1) = colAvgRight(:,1) ./ colAvgRight(:,2);
 % subtightplot(8,5,1);
-% vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[-90 0],1,0);
+vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[-90 0],1,0);
 % subtightplot(8,5,5);
 % figure(2);
 % vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[90 0],1,0);

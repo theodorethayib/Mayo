@@ -194,18 +194,18 @@ fprintf('seven')
 %   setBrainProps(hs,true);
 % end
 
-axis('off');
-% h=findobj('type','patch');
-% for k=1:length(h)
-%     set(h(k),'SpecularStrength',.1, ...
-% 	  'DiffuseStrength',.6, ...
-% 	  'SpecularColorReflectance',0, ...
-% 	  'AmbientStrength',.45);
-% end  
-set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
-zoom(1);
-view(viewAZEL);
-camlight;
-fprintf('eight');
+% axis('off');
+% % h=findobj('type','patch');
+% % for k=1:length(h)
+% %     set(h(k),'SpecularStrength',.1, ...
+% % 	  'DiffuseStrength',.6, ...
+% % 	  'SpecularColorReflectance',0, ...
+% % 	  'AmbientStrength',.45);
+% % end  
+% set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
+% zoom(1);
+% view(viewAZEL);
+% camlight;
+% fprintf('eight');
 
 

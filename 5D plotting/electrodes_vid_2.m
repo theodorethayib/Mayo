@@ -8,10 +8,10 @@
 
 % VARIABLES
 tic %Tracks how long the code runs for
-number_of_frequencies = 1;
-number_of_patients = 10;
-number_of_time = 1;
-number_of_electrodes = 72;
+number_of_frequencies = 6;
+number_of_patients = 139;
+number_of_time = 44;
+% number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
 frame_rate = 5;
@@ -19,12 +19,17 @@ circle_size = 3;
 min_ip_threshold = 0.05;
 max_ip_threshold = 0.5;
 
+use_specific_time = 1;
+specific_time_start = 6;
+specific_time_end = 6;
+
 % Time for when word is on/off during the test.
 word_on_time = 8;
 word_off_time = 37;
 
 % Name of the exported video.
-vid_name = 't2.avi';
+save_video = 1;
+vid_name = 'a2.avi';
 
 % Set save_picture to 1 if you want each time-frame to be saved to a png
 % file. Set folder pictures to be saved in to pic_export_folder
@@ -84,96 +89,63 @@ fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
 CBar = imread('Colorbar_new3.png');
 
 % Prepares the video file
-v = VideoWriter(vid_name);
-v.FrameRate = frame_rate;
-open(v);
+if save_video == 1
+    v = VideoWriter(vid_name);
+    v.FrameRate = frame_rate;
+    open(v);
+end
 
 % Creates a maximized figure with the background color specified above, and
 % sets matlab to use OpenGL.
-f = figure(1000);
+f = figure(1);
 set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'WindowState','maximized','InvertHardcopy','off','Renderer','OpenGL')
-% 
-% % EMPTY FRAMES AT BEGINNING OF VIDEO 
-% % Upper time graph
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-% time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
-% 
-% % Lower time graph
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-% time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
-% 
-% % Colorbar
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);imshow(CBar);
-% 
-% % Plots empty brain pictures
-% for subplot_num = 1:number_of_frequencies
-%     % Text for the frequency legend
-%     switch subplot_num
-%         case 1
-%             frequency_legend = f1;
-%         case 2
-%             frequency_legend = f2;
-%         case 3
-%             frequency_legend = f3;
-%         case 4
-%             frequency_legend = f4;
-%         case 5
-%             frequency_legend = f5;
-%         case 6
-%             frequency_legend = f6;
-%     end
-%     % Plots brains in the correct views
-%     for current_view = 1: number_of_views
-%         subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,[0.1 0]);
-%         
-%         hold on;
-%         switch current_view
-%             case 1
-%                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%                 view(-90,0);
-%                 text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
-%             case 2
-%                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%                 view(90,0);
-%             case 3
-%                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%                 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-%                 view(0,-90);
-%             case 4
-%                 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-%                 view(-90,0);
-%             case 5
-%                 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-%                 view(90,0);
-%         end
-%         axis('off');zoom(1);camlight;
-%         set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
-%     end
-% end
-% hold off;
-% % Saves number_of_empty_frames frames of the empty brain to the beginning
-% % of the video.
-% for empty_plot = 1:number_of_empty_frames
-%     frame = getframe(gcf);
-%     writeVideo(v,frame);
-% end
-% 
-% fullFileName = fullfile(pic_export_folder, 'empty_brain.png');
-% saveas(gcf,fullFileName);
-% 
-% clf;
+
+% EMPTY FRAMES AT BEGINNING OF VIDEO
+brainplot_empty(number_of_frequencies, number_of_views, number_of_time, fig_bg_color, word_on_time, word_off_time, CBar, vL, fL, vR, fR, f1, f2, f3, f4, f5, f6, font_size);
+if save_video == 1
+    for empty_frames = 1:number_of_empty_frames
+        frame = getframe(gcf);
+        writeVideo(v,frame);
+    end
+end
+if save_picture == 1
+    fullFileName = fullfile(pic_export_folder, 'empty_brain.png');
+    saveas(gcf,fullFileName);
+end
+
+if use_specific_time == 1
+    time_value = specific_time_start;
+    time_end = specific_time_end;
+else
+    time_vlaue = 1;
+    time_end = number_of_time;
+end
+clf;
 
 % PLOTS ELECTRODES IN BRAINS LOOPS FOR ELECTRODES
-for tNum = 1:number_of_time
+for tNum = time_value:time_end
     tNum % To see how far along the code is - can be commented out
     
-    % Resets elec_rows_matrix and elec_matrix
-    elec_rows_matrix = [];
-    elec_matrix = [];
+     % Upper time graph
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
+    time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
+    
+    % Lower time graph
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
+    time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
+    
+    % Colorbar
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
+    imshow(CBar);
+    
+    
     
     for fNum = 1:number_of_frequencies
-        % Resets elec_rows counter
-        elec_rows = 0;
+        % Resets elec_rows_matrix and elec_matrix
+        elec_matrix_left = [];
+        elec_matrix_right = [];
+        
+        
         
         for pNum = 1:number_of_patients
             % Gets location and IP values of electrodes of the current
@@ -218,36 +190,20 @@ for tNum = 1:number_of_time
                     
                     c = [red_color blue_color green_color];
                     % Saves what hemispehre the electrodes are in
-                    eHemisphere = eHemisphereFull(eNum);
-                    patient_matrix = [x y z c eHemisphere];
+%                     eHemisphere = eHemisphereFull(eNum);
+                    if eHemisphereFull(eNum) == 1
+                        elec_matrix_left = [elec_matrix_left;x y z c];
+                    else
+                        elec_matrix_right = [elec_matrix_right;x y z c];
+                    end
                     
-                    % Adds all electrode information (x y z coordinates,
-                    % color, and hemisphere) into one big matrix
-                    % (elec_matrix) and adds one to the number of rows
-                    elec_matrix = [elec_matrix;patient_matrix];
-                    elec_rows = elec_rows + 1;
                 end
             end
         end
-        elec_rows_matrix = [elec_rows_matrix;elec_rows];
-    end
-    % Upper time graph
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-    time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
-    
-    % Lower time graph
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-    time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
-    
-    % Colorbar
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);    imshow(CBar);
-    
-    hold on;
-    
-    % Brain graphs subplot_num is for the rows of the plots (1 is the
-    % first brain plot, etc)
-    for subplot_num = 1:number_of_frequencies
-        switch subplot_num
+        % Brain graphs subplot_num is for the rows of the plots (1 is the
+        % first brain plot, etc)
+        
+        switch fNum
             case 1
                 frequency_legend = f1;
             case 2
@@ -261,22 +217,104 @@ for tNum = 1:number_of_time
             case 6
                 frequency_legend = f6;
         end
-        % Prepares for figuring out what rows of the matrix each frequency
-        % uses
-        row_count = 1;
-        if subplot_num == 1
-            row_for_this_frequency = elec_rows_matrix(1);
-            row_start = 1; % What row the subplot should start on
-        else
-            row_start = row_start + elec_rows_matrix(subplot_num - 1);
-            row_for_this_frequency = elec_rows_matrix(subplot_num);
-        end
-        for current_view = 1: number_of_views
-            subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,[0.1 0]);
+        
+        for vNum = 1:number_of_views
+            subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* fNum * 3 - (number_of_views + 1) * 2 + vNum (number_of_views + 1) * fNum * 3 + vNum], [0.0 0.0],0,[0.1 0]);
             
             hold on;
             % Plots brains in the correct views
-            switch current_view
+            switch vNum
+                case 1
+                    brainplot_with_electrodes(vL, fL, [0.7 0.7 0.7], elec_matrix_left, circle_size);
+                    view(-90,0);
+                    text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
+                case 2
+                    brainplot_with_electrodes(vL, fL, [0.7 0.7 0.7], elec_matrix_left, circle_size);
+                    view(90,0);
+                case 3
+                    brainplot_with_electrodes(vL, fL, [0.7 0.7 0.7], elec_matrix_left, circle_size);
+                    brainplot_with_electrodes(vR, fR, [0.7 0.7 0.7], elec_matrix_right, circle_size);
+                    view(0,-90);
+                case 4
+                    brainplot_with_electrodes(vR, fR, [0.7 0.7 0.7], elec_matrix_right, circle_size);
+                    view(-90,0);
+                case 5
+                    brainplot_with_electrodes(vR, fR, [0.7 0.7 0.7], elec_matrix_right, circle_size);
+                    view(90,0);
+            end
+            axis('off');zoom(1);camlight;
+            set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
+        end
+    end
+
+    hold off;
+    
+    % Writes current figure to the video
+    if save_video == 1
+        frame = getframe(gcf);
+        writeVideo(v,frame);
+    end
+    
+    % If save_picture is on, it will save the figure as a png file
+    if save_picture == 1
+        pngFileName = sprintf('time_%d.png', tNum);
+        fullFileName = fullfile(pic_export_folder, pngFileName);
+        saveas(gcf,fullFileName);
+    end
+    clf;
+end
+
+if save_video == 1
+    brainplot_empty(number_of_frequencies, number_of_views, number_of_time, fig_bg_color, word_on_time, word_off_time, CBar, vL, fL, vR, fR, f1, f2, f3, f4, f5, f6, font_size);
+    for empty_frames = 1:number_of_empty_frames
+        frame = getframe(gcf);
+        writeVideo(v,frame);
+    end
+end
+
+% Closes the video writer.
+if save_video == 1
+    close(v);
+end
+toc % Tracks how long the code runs for
+
+
+
+function brainplot_empty(number_of_frequencies, number_of_views, number_of_time, fig_bg_color, word_on_time, word_off_time, CBar, vL, fL, vR, fR, f1, f2, f3, f4, f5, f6, font_size)
+    % Upper time graph
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
+    time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
+
+    % Lower time graph
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
+    time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
+
+    % Colorbar
+    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
+    imshow(CBar);
+    % Plots empty brain pictures.
+    for fNum = 1:number_of_frequencies
+        % Text for the frequency legend.
+        switch fNum
+            case 1
+                frequency_legend = f1;
+            case 2
+                frequency_legend = f2;
+            case 3
+                frequency_legend = f3;
+            case 4
+                frequency_legend = f4;
+            case 5
+                frequency_legend = f5;
+            case 6
+                frequency_legend = f6;
+        end
+        % Plots brains in the correct views
+        for vNum = 1:number_of_views
+            subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* fNum * 3 - (number_of_views + 1) * 2 + vNum (number_of_views + 1) * fNum * 3 + vNum], [0.0 0.0],0,[0.1 0]);
+
+            hold on;
+            switch vNum
                 case 1
                     plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
                     view(-90,0);
@@ -297,124 +335,7 @@ for tNum = 1:number_of_time
             end
             axis('off');zoom(1);camlight;
             set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
-            
-            % Plots electrodes (in correct hemisphere)
-            if current_view <= 2
-                for row_number = row_start:(row_for_this_frequency + row_start - 1)
-                    if elec_matrix(row_number,7) == 1
-                        markercolor = [elec_matrix(row_number,4) elec_matrix(row_number,5) elec_matrix(row_number,6)];
-                        x = elec_matrix(row_number,1);
-                        y = elec_matrix(row_number,2);
-                        z = elec_matrix(row_number,3);
-                        
-                        p = plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-                    end
-                end
-            elseif current_view >= 4
-                for row_number = row_start:(row_for_this_frequency + row_start - 1)
-                    if elec_matrix(row_number,7) == 0
-                        markercolor = [elec_matrix(row_number,4) elec_matrix(row_number,5) elec_matrix(row_number,6)];
-                        x = elec_matrix(row_number,1);
-                        y = elec_matrix(row_number,2);
-                        z = elec_matrix(row_number,3);
-                        
-                        plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-                    end
-                end
-            else
-                for row_number = row_start:(row_for_this_frequency + row_start - 1)
-                    markercolor = [elec_matrix(row_number,4) elec_matrix(row_number,5) elec_matrix(row_number,6)];
-                    x = elec_matrix(row_number,1);
-                    y = elec_matrix(row_number,2);
-                    z = elec_matrix(row_number,3);
-                    
-                    plot3(elec_matrix(row_number,1),elec_matrix(row_number,2),elec_matrix(row_number,3),'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-                end
-            end
         end
     end
     hold off;
-    
-    % Writes current figure to the video
-    frame = getframe(gcf);
-    writeVideo(v,frame);
-    
-    % If save_picture is on, it will save the figure as a png file
-    if save_picture == 1
-        pngFileName = sprintf('time_%d.png', tNum);
-        fullFileName = fullfile(pic_export_folder, pngFileName);
-        saveas(gcf,fullFileName);
-    end
-    clf;
 end
-% 
-% % EMPTY FRAMES AT THE END OF VIDEO 
-% % Upper time graph
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-% time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
-% 
-% % Lower time graph
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-% time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
-% 
-% % Colorbar
-% subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
-% imshow(CBar);
-% % Plots empty brain pictures.
-% for subplot_num = 1:number_of_frequencies
-%     % Text for the frequency legend.
-%     switch subplot_num
-%         case 1
-%             frequency_legend = f1;
-%         case 2
-%             frequency_legend = f2;
-%         case 3
-%             frequency_legend = f3;
-%         case 4
-%             frequency_legend = f4;
-%         case 5
-%             frequency_legend = f5;
-%         case 6
-%             frequency_legend = f6;
-%     end
-%     % Plots brains in the correct views
-%     for current_view = 1: number_of_views
-%         subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* subplot_num * 3 - (number_of_views + 1) * 2 + current_view (number_of_views + 1) * subplot_num * 3 + current_view], [0.0 0.0],0,[0.1 0]);
-%         
-%         hold on;
-%         switch current_view
-%             case 1
-%                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%                 view(-90,0);
-%                 text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
-%             case 2
-%                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%                 view(90,0);
-%             case 3
-%                 plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-%                 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-%                 view(0,-90);
-%             case 4
-%                 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-%                 view(-90,0);
-%             case 5
-%                 plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-%                 view(90,0);
-%         end
-%         axis('off');zoom(1);camlight;
-%         set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
-%     end
-% end
-% hold off;
-% 
-% % Saves number_of_empty_frames frames of the empty brain to the end of the
-% % video.
-% for empty_plot = 1:number_of_empty_frames
-%     frame = getframe(gcf);
-%     writeVideo(v,frame);
-% end
-
-% clf;
-% Closes the video writer.
-close(v);
-toc % Tracks how long the code runs for
