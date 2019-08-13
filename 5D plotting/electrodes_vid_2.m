@@ -255,6 +255,7 @@ for tNum = time_value:time_end
         writeVideo(v,frame);
     end
     
+    
     % If save_picture is on, it will save the figure as a png file
     if save_picture == 1
         pngFileName = sprintf('time_%d.png', tNum);
@@ -339,3 +340,15 @@ function brainplot_empty(number_of_frequencies, number_of_views, number_of_time,
     end
     hold off;
 end
+
+function brainplot_with_electrodes(vectors, faces, brain_color, elec_matrix, circle_size)
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+plotsurf_wrapper(vectors, faces, brain_color);
+    for vectRowNum = 1:size(elec_matrix,1)
+        markercolor = [elec_matrix(vectRowNum,4) elec_matrix(vectRowNum,5) elec_matrix(vectRowNum,6)];
+        plot3(elec_matrix(vectRowNum,1),elec_matrix(vectRowNum,2),elec_matrix(vectRowNum,3),...
+            'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
+    end
+end
+s
