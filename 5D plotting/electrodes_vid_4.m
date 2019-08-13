@@ -22,8 +22,8 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % specific_time_start and specific_time_end. If not, it will plot all
 % times.
 use_specific_time = 1;
-specific_time_start = 8;
-specific_time_end = 8;
+specific_time_start = 6;
+specific_time_end = 44;
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
@@ -189,7 +189,7 @@ for tNum = time_value:time_end
                 case 3
                     hold on;
                     vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[0 -90],1,0);
-                    vertex3d_withAvailROI(vL,fL,[],colMatrixRight,0.99,[0 -90],1,0);
+                    vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[0 -90],1,0);
                     hold off;
                 case 4
                     vertex3d_withAvailROI(vL,fL,[],colMatrixRight,0.99,[-90 0],1,0);
