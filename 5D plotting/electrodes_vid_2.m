@@ -1,10 +1,41 @@
-% Code for plotting electrodes onto the brain.
-
-% Requires the following files: patients.mat, all_loc.mat, FINAL_AE2.mat,
-% IPtime2.mat, hemispheres.mat, BRAIN_SCHEME.mat, fread3.m,
-% plot3_wrapper.m, plotsurf_wrapper.m, read_surf_wrapper.m, read_surf.m,
-% render_freesurfer3D.m, time_graph.m, subtightplot.m, and
-% Colorbar_new3.png.
+% 
+% DESCRIPTION:
+% 	Plots electrodes directly onto a brain surface with options for saving
+% 	each individual frame as a picture, and saving them as a video (with
+% 	options for if empty brain frames in the beginning and end of the video
+% 	are wanted).
+% 
+% REQUIRED FILES
+%   (1) all_loc.mat = [x y z] location of all electrodes
+%        all_loc(patients{1}) will give all electrode [x y z] for patient 1 
+%   (2)BRAIN_SCHEME.mat = vectors and faces to plot the left and right
+%   sides of the brain.
+%   (3) FINAL_AE2.mat = binary values for whether an electrode is active
+%   or inactive (1 and 0 respectively)
+%       FINAL_AE2(patients{1}) to see which electrodes are active/inactive
+%       for patient 1
+%   (4) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
+%   for right
+%        hemispheres(patients{1}) will show which hemipshere all electrodes
+%        for patient 1 are in
+%   (5) IPtime2.mat = IP values for each electrode at each frequency at
+%   each time point for each patient
+%   (6) patients.mat = key of patient indentifiers
+%   (7) brainplot_empty.m = empty figure of all the brain surfaces, with the
+%   colorbar and time graphs.
+%   (8) brainplot_with_electrodes.m = plots electrodes on top of a brain surface.
+%   (9) fread.m
+%   (10) plot3_wrapper.m = wrapper for plotting the brain surface
+%   (11) plotsurf_wrapper.m = wrapper for plotting the brain surface
+%   (12) read_surf_wrapper.m = wrapper for read_surf
+%   (13) read_surf.m = for reading a surface file
+%   (14) render_freesurfer3D.m = rendering a freesurfer surface
+%   (15) time_graph.m = plots the time graphs at the bottom and bottom of
+%   the figures
+%   (16) subtightplot.m = allows for the brain surface subplots to be
+%   closer together
+%   (17) Colorbar_new3.png = png file for the colorbar
+% 
 
 % VARIABLES
 tic %Tracks how long the code runs for
@@ -281,73 +312,6 @@ toc % Tracks how long the code runs for
 
 
 
-function brainplot_empty(number_of_frequencies, number_of_views, number_of_time, fig_bg_color, word_on_time, word_off_time, CBar, vL, fL, vR, fR, f1, f2, f3, f4, f5, f6, font_size)
-    % Upper time graph
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
-    time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
 
-    % Lower time graph
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
-    time_graph(0, number_of_time, fig_bg_color, word_on_time, word_off_time);
 
-    % Colorbar
-    subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
-    imshow(CBar);
-    % Plots empty brain pictures.
-    for fNum = 1:number_of_frequencies
-        % Text for the frequency legend.
-        switch fNum
-            case 1
-                frequency_legend = f1;
-            case 2
-                frequency_legend = f2;
-            case 3
-                frequency_legend = f3;
-            case 4
-                frequency_legend = f4;
-            case 5
-                frequency_legend = f5;
-            case 6
-                frequency_legend = f6;
-        end
-        % Plots brains in the correct views
-        for vNum = 1:number_of_views
-            subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* fNum * 3 - (number_of_views + 1) * 2 + vNum (number_of_views + 1) * fNum * 3 + vNum], [0.0 0.0],0,[0.1 0]);
 
-            hold on;
-            switch vNum
-                case 1
-                    plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-                    view(-90,0);
-                    text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
-                case 2
-                    plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-                    view(90,0);
-                case 3
-                    plotsurf_wrapper(vL, fL, [0.7, 0.7, 0.7]);
-                    plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-                    view(0,-90);
-                case 4
-                    plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-                    view(-90,0);
-                case 5
-                    plotsurf_wrapper(vR, fR, [0.7, 0.7, 0.7]);
-                    view(90,0);
-            end
-            axis('off');zoom(1);camlight;
-            set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
-        end
-    end
-    hold off;
-end
-
-function brainplot_with_electrodes(vectors, faces, brain_color, elec_matrix, circle_size)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-plotsurf_wrapper(vectors, faces, brain_color);
-    for vectRowNum = 1:size(elec_matrix,1)
-        markercolor = [elec_matrix(vectRowNum,4) elec_matrix(vectRowNum,5) elec_matrix(vectRowNum,6)];
-        plot3(elec_matrix(vectRowNum,1),elec_matrix(vectRowNum,2),elec_matrix(vectRowNum,3),...
-            'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
-    end
-end
