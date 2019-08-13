@@ -197,7 +197,6 @@ for tNum = time_value:time_end
                     vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[90 0],1,0);
             end
             %             Sets plot limits
-            vertex3d_withAvailROI(vL,fL,[],0,0.99,[-90 0],1,0);
             set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
             hold off;
         end
