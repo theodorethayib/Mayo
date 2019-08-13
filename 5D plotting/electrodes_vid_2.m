@@ -351,4 +351,3 @@ plotsurf_wrapper(vectors, faces, brain_color);
             'o','MarkerSize',circle_size,'Color',markercolor,'MarkerFaceColor',markercolor);
     end
 end
-s
