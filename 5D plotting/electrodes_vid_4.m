@@ -23,7 +23,7 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % times.
 use_specific_time = 1;
 specific_time_start = 6;
-specific_time_end = 7;
+specific_time_end = 44;
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
@@ -189,7 +189,7 @@ for tNum = time_value:time_end
                 case 3
                     hold on;
                     vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[0 -90],1,0);
-                    vertex3d_withAvailROI(vL,fL,[],colMatrixRight,0.99,[0 -90],1,0);
+                    vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[0 -90],1,0);
                     hold off;
                 case 4
                     vertex3d_withAvailROI(vL,fL,[],colMatrixRight,0.99,[-90 0],1,0);
@@ -197,6 +197,7 @@ for tNum = time_value:time_end
                     vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[90 0],1,0);
             end
             %             Sets plot limits
+            vertex3d_withAvailROI(vL,fL,[],0,0.99,[-90 0],1,0);
             set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
             hold off;
         end
