@@ -10,31 +10,27 @@
 %        all_loc(patients{1}) will give all electrode [x y z] for patient 1 
 %   (2)BRAIN_SCHEME.mat = vectors and faces to plot the left and right
 %   sides of the brain.
-%   (3) FINAL_AE2.mat = binary values for whether an electrode is active
-%   or inactive (1 and 0 respectively)
-%       FINAL_AE2(patients{1}) to see which electrodes are active/inactive
-%       for patient 1
-%   (4) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
+%   (3) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
 %   for right
 %        hemispheres(patients{1}) will show which hemipshere all electrodes
 %        for patient 1 are in
-%   (5) IPtime2.mat = IP values for each electrode at each frequency at
+%   (4) IPtime2.mat = IP values for each electrode at each frequency at
 %   each time point for each patient
-%   (6) patients.mat = key of patient indentifiers
-%   (7) brainplot_empty.m = empty figure of all the brain surfaces, with the
+%   (5) patients.mat = key of patient indentifiers
+%   (6) brainplot_empty.m = empty figure of all the brain surfaces, with the
 %   colorbar and time graphs.
-%   (8) brainplot_with_electrodes.m = plots electrodes on top of a brain surface.
-%   (9) fread.m
-%   (10) plot3_wrapper.m = wrapper for plotting the brain surface
-%   (11) plotsurf_wrapper.m = wrapper for plotting the brain surface
-%   (12) read_surf_wrapper.m = wrapper for read_surf
-%   (13) read_surf.m = for reading a surface file
-%   (14) render_freesurfer3D.m = rendering a freesurfer surface
-%   (15) time_graph.m = plots the time graphs at the bottom and bottom of
+%   (7) brainplot_with_electrodes.m = plots electrodes on top of a brain surface.
+%   (8) fread.m
+%   (9) plot3_wrapper.m = wrapper for plotting the brain surface
+%   (10) plotsurf_wrapper.m = wrapper for plotting the brain surface
+%   (11) read_surf_wrapper.m = wrapper for read_surf
+%   (12) read_surf.m = for reading a surface file
+%   (13) render_freesurfer3D.m = rendering a freesurfer surface
+%   (14) time_graph.m = plots the time graphs at the bottom and bottom of
 %   the figures
-%   (16) subtightplot.m = allows for the brain surface subplots to be
+%   (15) subtightplot.m = allows for the brain surface subplots to be
 %   closer together
-%   (17) Colorbar_new3.png = png file for the colorbar
+%   (16) Colorbar_new3.png = png file for the colorbar
 % 
 
 % VARIABLES
@@ -50,7 +46,7 @@ circle_size = 3;
 min_ip_threshold = 0.05;
 max_ip_threshold = 0.5;
 
-use_specific_time = 1;
+use_specific_time = 0;
 specific_time_start = 6;
 specific_time_end = 6;
 
@@ -107,12 +103,11 @@ redGreenColorOne = (dark_red_color(3) - light_red_color(3)) / 0.9;
 redGreenColorTwo = dark_red_color(3) - redGreenColorOne;
 
 % Loads all the required data for electrodes and brain plotting.
-load('patients.mat');
 load('all_loc.mat');
-load('FINAL_AE2.mat');
-load('IPtime2.mat');
-load('hemispheres.mat');
 load('BRAIN_SCHEME.mat');
+load('hemispheres.mat');
+load('IPtime2.mat');
+load('patients.mat');
 vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
 fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
 
