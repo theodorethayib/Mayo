@@ -2,9 +2,29 @@
 %   Plots electrodes directly onto a brain surface using
 %   vertex3d_withAvailROI.m and brain data from BRAIN_SCHEME.mat
 % 
-% Required data and functions: all_loc.mat, BRAIN_SCHEME.mat,
-% hemispheres.mat, IPtime2.mat, patients.mat, myJet.m, subtightplot.m,
-% time_graph.m, vertex3d_withAvailROI.m, and Colorbar_new3.png
+% REQUIRED FILES
+%   (1) all_loc.mat = [x y z] location of all electrodes
+%        all_loc(patients{1}) will give all electrode [x y z] for patient 1 
+%   (2)BRAIN_SCHEME.mat = vectors and faces to plot the left and right
+%   sides of the brain.
+%   (3) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
+%   for right
+%        hemispheres(patients{1}) will show which hemipshere all electrodes
+%        for patient 1 are in
+%   (4) IPtime2.mat = IP values for each electrode at each frequency at
+%   each time point for each patient
+%   (5) patients.mat = key of patient indentifiers
+%   (6) myJet.m = color map for electrode coloring
+%   (7) time_graph.m = plots the time graphs at the bottom and bottom of
+%   the figures
+%   (8) subtightplot.m = allows for the brain surface subplots to be
+%   closer together
+%   (9) vertex3d_withAvailROI.m = plots a brain surface colored based off
+%   electrodes within a ROI
+%   (10) Colorbar_new3.png = png file for the colorbar
+% 
+
+% VARIABLES
 tic
 number_of_time = 44; % Total number of time frames within the data.
 number_of_frequencies = 6; % Total number of frequencies.
@@ -39,17 +59,17 @@ frame_rate = 5;
 % pic_export_folder is the folder where the exported pictures will be
 % saved.
 save_picture = 1;
-pic_export_folder = '/home/michal/MATLAB/projects/Mayo/trunk/5D plotting/pic_exports';
+pic_export_folder = '/Users/localadmin/Documents/MATLAB/5D plotting_new_new/5D plotting/pic_exports';
 
 % Loads required data.
-load('patients.mat');
 load('all_loc.mat');
-load('FINAL_AE2.mat');
-load('IPtime2.mat');
-load('hemispheres.mat');
 load('BRAIN_SCHEME.mat');
+load('hemispheres.mat');
+load('IPtime2.mat');
+load('patients.mat');
 vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
 fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
+
 
 % CBar loads the colorbar, and fig_bg_color sets the figure's background
 % color.
@@ -77,6 +97,75 @@ end
 % sets matlab to use OpenGL.
 f = figure(1);
 set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'InvertHardcopy','off','Renderer','OpenGL')
+
+% Empty brain graphs
+% Upper time graph
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [1 number_of_views + 1], [0.0 0.0],0,0);
+time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
+
+% Lower time graph
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * number_of_frequencies * 3 + number_of_views + 2 (number_of_views + 1) * number_of_frequencies * 3 + (number_of_views + 1) * 2], [0.0 0.0],0,0);
+time_graph(tNum, number_of_time, fig_bg_color, word_on_time, word_off_time);
+
+% Colorbar
+subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1) * 3 (number_of_views + 1) * (number_of_frequencies * 3)], [],[],[0.2 0.02]);
+imshow(CBar);
+
+% Plots empty brain pictures.
+for fNum = 1:number_of_frequencies
+    % Text for the frequency legend.
+    switch fNum
+        case 1
+            frequency_legend = f1;
+        case 2
+            frequency_legend = f2;
+        case 3
+            frequency_legend = f3;
+        case 4
+            frequency_legend = f4;
+        case 5
+            frequency_legend = f5;
+        case 6
+            frequency_legend = f6;
+    end
+    % Plots brains in the correct views
+    for vNum = 1:number_of_views
+        subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* fNum * 3 - (number_of_views + 1) * 2 + vNum (number_of_views + 1) * fNum * 3 + vNum], [0.0 0.0],0,[0.1 0]);
+
+        hold on;
+        switch vNum
+            case 1
+                vertex3d_withAvailROI(vL,fL,[],0,0.99,[-90 0],0,0);
+                text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
+            case 2
+                vertex3d_withAvailROI(vL,fL,[],0,0.99,[90 0],0,0);
+            case 3
+                hold on;
+                vertex3d_withAvailROI(vL,fL,[],0,0.99,[0 -90],0,0);
+                vertex3d_withAvailROI(vR,fR,[],0,0.99,[0 -90],0,0);
+                hold off;
+            case 4
+                vertex3d_withAvailROI(vL,fL,[],0,0.99,[-90 0],0,0);
+            case 5
+                vertex3d_withAvailROI(vR,fR,[],0,0.99,[90 0],0,0);
+        end
+        set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
+    end
+end
+hold off;
+
+if save_video == 1
+    for empty_frames = 1:number_of_empty_frames
+        frame = getframe(gcf);
+        writeVideo(v,frame);
+    end
+end
+if save_picture == 1
+    fullFileName = fullfile(pic_export_folder, 'empty_brain.png');
+    saveas(gcf,fullFileName);
+end
+
+clf;
 
 % If use_specific_time is used, sets the start and end time according to
 % specific_time_start and specific_time_end. If not, it sets the start time

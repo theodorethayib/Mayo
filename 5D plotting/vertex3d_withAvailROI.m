@@ -26,7 +26,6 @@ function vertex3d_withAvailROI(V,F,CS,D,colorCLIM,viewAZEL,interpIt,isSlice,roiM
 %  (3) 4/11: made V and F as direct inputs, which allows slices. 
 %
 
-% I think this is the brain color
 if ~exist('bCol','var')||isempty(bCol)
   bCol = [0.5];
 end
@@ -40,7 +39,7 @@ end
 if ~exist('satControl','var')||isempty(satControl)
   satControl    = .15;
 end
-fprintf('one')
+fprintf('one ')
 if isSlice
   % CS contains indices from 1:125 of what the colr at a vertex
   % should be to recover the hippocampal outline.  ROUND CS because
@@ -52,7 +51,6 @@ if isSlice
 else
   FVCD    = repmat([bCol bCol bCol],size(V,1),1);
 end
-fprintf('two')
 fprintf('   ')
 if exist('roiMask','var') && ~isempty(roiMask)  
   roiMaskLimits = [1 colorCLIM];
@@ -73,14 +71,12 @@ if exist('roiMask','var') && ~isempty(roiMask)
     FVCD=FVCDcorrected;
   end
 end
-fprintf('three')
 % indices of all the significant vertices to plot
 sigVind = find(~isnan(D));
 
 % only select faces that have all vertices = significant 
 sigF    = find(prod(double(ismember(F,sigVind)),2)==1);
 insigF  = find(prod(double(ismember(F,sigVind)),2)==0);
-fprintf('four')
 % create the color map
 midColInd     = lenColorMap/2;
 LoBoundColInd = midColInd - round(lenColorMap*satControl);
@@ -103,7 +99,6 @@ end
 %c=colorbar();
 %set(c,'YTick',[0])
 %figure(f)
-fprintf('five')
 % now go back and cover up all the areas with no electrodes
 f_empty = F(insigF,:);
 hold on
@@ -113,23 +108,16 @@ hs = patch('faces',f_empty,'vertices',V,'edgecolor','none','FaceColor',...
     
 % interp the colors of each sig vertex
 X = [V(F(sigF,1),1)';V(F(sigF,2),1)';V(F(sigF,3),1)'];
-fprintf('X done')
 Y = [V(F(sigF,1),2)';V(F(sigF,2),2)';V(F(sigF,3),2)'];
-fprintf('Y done')
 Z = [V(F(sigF,1),3)';V(F(sigF,2),3)';V(F(sigF,3),3)'];
-fprintf('Z done')
 C_raw = [D(F(sigF,1))';D(F(sigF,2))';D(F(sigF,3))'];
-fprintf('C_raw done')
 if interpIt
   C = C_raw;
-  fprintf('interpIt true done')
 else      
   C = mean(C_raw,1);
-  fprintf('interpIt false done')
 end
-fprintf('done with interpIt test')
+fprintf('interp done ')
 hBrain = fill3(X,Y,Z,C,'EdgeColor','none');
-fprintf('six')
 % get the shades of all vertices in each patch
 CLIMVECTOR = linspace(-colorCLIM,colorCLIM,1000);
 if ~isSlice
@@ -179,7 +167,7 @@ else
   
 end
 hold off
-fprintf('seven')
+fprintf('two ')
 % lighting phong    
 % if ~isSlice
 %   % you only need light with the brain surfae because the
@@ -194,18 +182,18 @@ fprintf('seven')
 %   setBrainProps(hs,true);
 % end
 
-% axis('off');
-% % h=findobj('type','patch');
-% % for k=1:length(h)
-% %     set(h(k),'SpecularStrength',.1, ...
-% % 	  'DiffuseStrength',.6, ...
-% % 	  'SpecularColorReflectance',0, ...
-% % 	  'AmbientStrength',.45);
-% % end  
-% set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
-% zoom(1);
-% view(viewAZEL);
-% camlight;
-% fprintf('eight');
+axis('off');
+h=findobj('type','patch');
+for k=1:length(h)
+    set(h(k),'SpecularStrength',.1, ...
+	  'DiffuseStrength',.6, ...
+	  'SpecularColorReflectance',0, ...
+	  'AmbientStrength',.45);
+end  
+set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
+zoom(1);
+view(viewAZEL);
+camlight;
+fprintf('vertex done ');
 
 
