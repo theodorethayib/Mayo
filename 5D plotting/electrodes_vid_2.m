@@ -19,21 +19,22 @@
 %        hemispheres(patients{1}) will show which hemipshere all electrodes
 %        for patient 1 are in
 %   (5) IPtime2.mat = IP values for each electrode at each frequency at
-%   each time point for each patient
-%   (6) patients.mat = key of patient indentifiers
-%   (7) brainplot_empty.m = empty figure of all the brain surfaces, with the
-%   colorbar and time graphs.
-%   (8) brainplot_with_electrodes.m = plots electrodes on top of a brain surface.
-%   (9) fread.m
-%   (10) plot3_wrapper.m = wrapper for plotting the brain surface
-%   (11) plotsurf_wrapper.m = wrapper for plotting the brain surface
-%   (12) read_surf_wrapper.m = wrapper for read_surf
-%   (13) read_surf.m = for reading a surface file
-%   (14) render_freesurfer3D.m = rendering a freesurfer surface
-%   (15) time_graph.m = plots the time graphs at the bottom and bottom of
-%   the figures
-%   (16) subtightplot.m = allows for the brain surface subplots to be
-%   closer together
+%   each time point for each patient 
+%   (6) patients.mat = key of patient indentifiers 
+%   (7) brainplot_empty.m = empty figure of all the brain surfaces, with 
+%   the colorbar and time graphs. 
+%   (8) brainplot_with_electrodes.m = plots electrodes on top of a brain
+%   surface. 
+%   (9) fread.m 
+%   (10) plot3_wrapper.m = wrapper for plotting the brain surface 
+%   (11) plotsurf_wrapper.m = wrapper for plotting the brain surface 
+%   (12) read_surf_wrapper.m = wrapper for read_surf 
+%   (13) read_surf.m = for reading a surface file 
+%   (14) render_freesurfer3D.m = rendering a freesurfer surface 
+%   (15) time_graph.m = plots the time graphs at the bottom and bottom of 
+%   the figures 
+%   (16) subtightplot.m = allows for the brain surface subplots to be 
+%   closer together 
 %   (17) Colorbar_new3.png = png file for the colorbar
 % 
 
@@ -42,7 +43,6 @@ tic %Tracks how long the code runs for
 number_of_frequencies = 6;
 number_of_patients = 139;
 number_of_time = 44;
-% number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
 frame_rate = 5;
@@ -221,7 +221,6 @@ for tNum = time_value:time_end
                     
                     c = [red_color blue_color green_color];
                     % Saves what hemispehre the electrodes are in
-%                     eHemisphere = eHemisphereFull(eNum);
                     if eHemisphereFull(eNum) == 1
                         elec_matrix_left = [elec_matrix_left;x y z c];
                     else
