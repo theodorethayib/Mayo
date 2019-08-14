@@ -8,7 +8,7 @@
 % REQUIRED FILES
 %   (1) all_loc.mat = [x y z] location of all electrodes
 %        all_loc(patients{1}) will give all electrode [x y z] for patient 1 
-%   (2)BRAIN_SCHEME.mat = vectors and faces to plot the left and right
+%   (2) BRAIN_SCHEME.mat = vectors and faces to plot the left and right
 %   sides of the brain.
 %   (3) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
 %   for right
@@ -38,7 +38,6 @@ tic %Tracks how long the code runs for
 number_of_frequencies = 6;
 number_of_patients = 139;
 number_of_time = 44;
-% number_of_electrodes = 72;
 number_of_views = 5;
 number_of_empty_frames = 4;
 frame_rate = 5;
@@ -176,14 +175,14 @@ for tNum = time_value:time_end
         for pNum = 1:number_of_patients
             % Gets location and IP values of electrodes of the current
             % patient
-            eLocation = all_loc(patients{pNum});
+            eLocation = all_loc(patients{pNum}); % Location of all electrodes for the current patient
             elec_field = getfield(IPtime2(patients{pNum}),'ip_all');
             
-            IPvalue_matrix = elec_field(:,fNum,tNum);
+            IPvalue_matrix = elec_field(:,fNum,tNum); % Gets IP values for all electrodes for the current patient in the correct time and frequency
             eSize = size(IPvalue_matrix,1); % Amount of electrodes in 
                                             % patient
-            eHemisphereFull = hemispheres(patients{pNum});
-            
+            eHemisphereFull = hemispheres(patients{pNum}); % Gets the hemisphere for all electrodes for the current patient
+            % Cycles through all electrodes for the current patient
             for eNum = 1:eSize
                 IPvalue = IPvalue_matrix(eNum, 1);
                 

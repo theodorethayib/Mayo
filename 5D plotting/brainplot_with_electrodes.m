@@ -2,6 +2,7 @@ function brainplot_with_electrodes(vectors, faces, brain_color, elec_matrix, cir
 % 
 % DESCRIPTION:
 %   Plots electrodes individually on top of a brain surface.
+%   This function is called by electrodes_vid_2.m
 % 
 % INPUT
 %   (1) vectors = vectors of the brain surface (as specified by

@@ -3,6 +3,7 @@ function brainplot_empty(number_of_frequencies, number_of_views, number_of_time,
 % DESCRIPTION:
 %   Plots an empty figure of all the brain surfaces, along with the
 %   colorbar and time graphs.
+%   This function is called by electrodes_vid_2.m
 % 
 % INPUT
 %   (1) number_of_frequencies = number of frequencies to be plotted

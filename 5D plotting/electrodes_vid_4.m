@@ -207,10 +207,9 @@ for tNum = time_value:time_end
         for pNum = 1:number_of_patients
             eLocation = all_loc(patients{pNum}); % Location of all electrodes for the current patient
             elec_field = getfield(IPtime2(patients{pNum}),'ip_all');
-            IPvalue_matrix = elec_field(:,fNum,tNum); % Gets IP values for all electrodes for the current patient
+            IPvalue_matrix = elec_field(:,fNum,tNum); % Gets IP values for all electrodes for the current patient in the correct time and frequency
             eHemisphereFull = hemispheres(patients{pNum}); % Gets the hemisphere for all electrodes for the current patient
-            % eSize = size(IPvalue_matrix,1); Cycles through all electrodes
-            % for the current patient
+            % Cycles through all electrodes for the current patient
             for eNum = 1:size(IPvalue_matrix,1)
                 IPvalue = IPvalue_matrix(eNum, 1); % Gets IP value for the current electrode
                 if IPvalue > min_ip_threshold || IPvalue < min_ip_threshold % Checks to see if electrode is within threshold
@@ -221,12 +220,18 @@ for tNum = time_value:time_end
                         IPvalue = -0.99;
                     end
                     if eHemisphereFull(eNum) == 1 % Determines whether to save the electrode color information in the left or right (hemisphere) matrix
-                        for vectRowNum = 1:size(vL,1)
-                            if eLocation(eNum,1) >= vL(vectRowNum,1) - plotThreshold && eLocation(eNum,1) <= vL(vectRowNum,1) + plotThreshold &&...
-                                    eLocation(eNum,2) >= vL(vectRowNum,2) - plotThreshold && eLocation(eNum,2) <= vL(vectRowNum,2) + plotThreshold &&...
-                                    eLocation(eNum,3) >= vL(vectRowNum,3) - plotThreshold && eLocation(eNum,3) <= vL(vectRowNum,3) + plotThreshold
+                        for vectRowNum = 1:size(vL,1) % Cycles through all vertices of the brain surface to see if the x, y, then z values of the current electrode are within the plot_threshold
+                            if eLocation(eNum,1) >= vL(vectRowNum,1) - plotThreshold && eLocation(eNum,1) <= vL(vectRowNum,1) + plotThreshold &&... % Checks x value
+                                    eLocation(eNum,2) >= vL(vectRowNum,2) - plotThreshold && eLocation(eNum,2) <= vL(vectRowNum,2) + plotThreshold &&... % Checks y value
+                                    eLocation(eNum,3) >= vL(vectRowNum,3) - plotThreshold && eLocation(eNum,3) <= vL(vectRowNum,3) + plotThreshold % Checks z value
                                 colAvgLeft(vectRowNum,1) = colAvgLeft(vectRowNum,1) + (IPvalue * (plotThreshold - norm(eLocation(eNum) - vL(vectRowNum)))); % Weighted average for color based on distance from the brain surface
-                                colAvgLeft(vectRowNum,2) = colAvgLeft(vectRowNum,2) + (plotThreshold - norm(eLocation(eNum) - vL(vectRowNum)));
+                                                                                                                                                            % Multiplies the IP value by (plot_threshold - distance from the brain surface) and adds that to the first column of the color matrix of the corresponding brain surface vector
+                                colAvgLeft(vectRowNum,2) = colAvgLeft(vectRowNum,2) + (plotThreshold - norm(eLocation(eNum) - vL(vectRowNum))); % (plot_threshold - distance from the brain surface) and adds that to the second column of the corresponding brain surface vector
+                                % Electrodes closer to the brain surface
+                                % carry more weight (as they're multiplied
+                                % by a larger number) compared to those
+                                % further away in order to properly
+                                % (linearly) weight by distance.
                             end
                         end
                     else
@@ -242,7 +247,8 @@ for tNum = time_value:time_end
                 end
             end
         end
-        % Averages the left and right color matrices
+        % Divides the left and right color matrices to get the weighted
+        % averages.
         colMatrixLeft(:,1) = colAvgLeft(:,1) ./ colAvgLeft(:,2);
         colMatrixRight(:,1) = colAvgRight(:,1) ./ colAvgRight(:,2);
         
@@ -285,7 +291,7 @@ for tNum = time_value:time_end
                 case 5
                     vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[90 0],1,0);
             end
-            %             Sets plot limits
+            % Sets plot limits
             set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
             hold off;
         end
