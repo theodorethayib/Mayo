@@ -165,6 +165,8 @@ if save_picture == 1
     saveas(gcf,fullFileName);
 end
 
+clf;
+
 % If use_specific_time is used, sets the start and end time according to
 % specific_time_start and specific_time_end. If not, it sets the start time
 % to 1 and the end time to the number stated in number_of_time.
