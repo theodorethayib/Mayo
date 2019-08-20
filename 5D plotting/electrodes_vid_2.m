@@ -215,7 +215,7 @@ for tNum = time_value:time_end
                     
                     c = [red_color blue_color green_color];
                     % Saves what hemispehre the electrodes are in
-%                     eHemisphere = eHemisphereFull(eNum);
+                    % eHemisphere = eHemisphereFull(eNum);
                     if eHemisphereFull(eNum) == 1
                         elec_matrix_left = [elec_matrix_left;x y z c];
                     else
@@ -244,6 +244,10 @@ for tNum = time_value:time_end
         end
         
         for vNum = 1:number_of_views
+%             Each brain is 3 subplots tall and 1 subplot wide, while the
+%             time graphs are 1 subplot tall and number_of_frequencies
+%             subplots wide. The colorbar is 3 * number_of_frequencies - 2
+%             subplots tall and 1 subplot wide.
             subtightplot(number_of_frequencies * 3 + 2, number_of_views + 1, [(number_of_views + 1)* fNum * 3 - (number_of_views + 1) * 2 + vNum (number_of_views + 1) * fNum * 3 + vNum], [0.0 0.0],0,[0.1 0]);
             
             hold on;

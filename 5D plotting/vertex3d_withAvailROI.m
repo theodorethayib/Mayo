@@ -190,10 +190,8 @@ for k=1:length(h)
 	  'SpecularColorReflectance',0, ...
 	  'AmbientStrength',.45);
 end  
-set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
 zoom(1);
 view(viewAZEL);
-camlight;
 fprintf('vertex done ');
 
 
