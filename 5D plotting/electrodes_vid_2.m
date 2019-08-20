@@ -8,7 +8,7 @@
 % REQUIRED FILES
 %   (1) all_loc.mat = [x y z] location of all electrodes
 %        all_loc(patients{1}) will give all electrode [x y z] for patient 1 
-%   (2) BRAIN_SCHEME.mat = vectors and faces to plot the left and right
+%   (2)BRAIN_SCHEME.mat = vectors and faces to plot the left and right
 %   sides of the brain.
 %   (3) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
 %   for right
