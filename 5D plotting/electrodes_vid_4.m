@@ -59,7 +59,7 @@ frame_rate = 5;
 % pic_export_folder is the folder where the exported pictures will be
 % saved.
 save_picture = 1;
-pic_export_folder = '/Users/localadmin/Documents/MATLAB/5D plotting_new_new/5D plotting/pic_exports';
+pic_export_folder = '/home/michal/MATLAB/projects/Mayo/trunk/5D plotting/pic_exports';
 
 % Loads required data.
 load('all_loc.mat');
@@ -96,7 +96,7 @@ end
 % Creates a maximized figure with the background color specified above, and
 % sets matlab to use OpenGL.
 f = figure(1);
-set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'InvertHardcopy','off','Renderer','OpenGL')
+set(gcf,'units','normalized','outerposition',[0 0 1 1],'color',fig_bg_color,'InvertHardcopy','off')
 
 % Empty brain graphs
 % Upper time graph
@@ -286,34 +286,36 @@ for tNum = time_value:time_end
             % Plots the brain based on subplot
             switch vNum
                 case 1
-                    vertex3d_withAvailROI(vL,fL,[],0,0.99,[-90 0],0,0);
-                    text(-3,2,frequency_legend, 'FontSize', font_size, 'HorizontalAlignment', 'right');
+                    vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[-90 0],1,0);
+                    text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
                     set(gca,'XLim',[-125 125],'YLim',[-150 125],'ZLim',[-60 85]);
                 case 2
-                    vertex3d_withAvailROI(vL,fL,[],0,0.99,[90 0],0,0);
+                    vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[90 0],1,0);
                     set(gca,'XLim',[-125 125],'YLim',[-150 125],'ZLim',[-60 85]);
                 case 3
                     hold on;
-                    vertex3d_withAvailROI(vL,fL,[],0,0.99,[0 -90],0,0);
-                    vertex3d_withAvailROI(vR,fR,[],0,0.99,[0 -90],0,0);
+                    vertex3d_withAvailROI(vL,fL,[],colMatrixLeft,0.99,[0 -90],1,0);
+                    vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[0 -90],1,0);
                     hold off;
                     set(gca,'XLim',[-125 125],'YLim',[-100 75],'ZLim',[-60 85]);
                 case 4
-                    vertex3d_withAvailROI(vL,fL,[],0,0.99,[-90 0],0,0);
+                    vertex3d_withAvailROI(vL,fL,[],colMatrixRight,0.99,[-90 0],1,0);
                     set(gca,'XLim',[-125 125],'YLim',[-150 125],'ZLim',[-60 85]);
                 case 5
-                    vertex3d_withAvailROI(vR,fR,[],0,0.99,[90 0],0,0);
-                    set(gca,'XLim',[-125 125],'YLim',[-150 125],'ZLim',[-60 85]);              
+                    vertex3d_withAvailROI(vR,fR,[],colMatrixRight,0.99,[90 0],1,0);
+                    set(gca,'XLim',[-125 125],'YLim',[-150 125],'ZLim',[-60 85]);
             end
             camlight; 
             % Sets plot limits
-            set(gca,'XLim',[-75 75],'YLim',[-125 100],'ZLim',[-75 100]);
             hold off;
             drawnow;
             pause(1);
         end
     end
     hold off;
+    fprintf('one ')
+    pause(1);
+    fprintf('two ')
 %     drawnow;
     % If save_video is on, save the figure as the set number of frames in
     % the video.
@@ -321,7 +323,7 @@ for tNum = time_value:time_end
         frame = getframe(gcf);
         writeVideo(v,frame);
     end
-    
+    fprintf('three ')
     % If save_picture is on, save the figure as a png file
     if save_picture == 1
         pngFileName = sprintf('time_%d.png', tNum);
@@ -329,9 +331,13 @@ for tNum = time_value:time_end
     %     saveas(gcf,fullFileName);
         export_fig(fullFileName);
     end
+    fprintf('four ')
     pause(1);
+    fprintf('five ')
     clf
+    fprintf('six ')
     pause(1);
+    fprintf('seven ')
 end
 if save_video == 1
     close(v);
