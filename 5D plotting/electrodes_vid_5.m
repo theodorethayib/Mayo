@@ -49,12 +49,6 @@ specific_time_end = 44;
 word_on_time = 8;
 word_off_time = 37;
 
-% Set save_video to 1 if video is to be saved, 0 if not. vid_name is the
-% name of the exported video. frame_rate is the framerate of the video
-save_video = 0;
-vid_name = 'VidExport_BSurfacePlotTest_3.avi';
-frame_rate = 5;
-
 % Set save_picture to 1 if picture is to be saved, 0 if not.
 % pic_export_folder is the folder where the exported pictures will be
 % saved.
@@ -148,8 +142,6 @@ for tNum = time_value:time_end
         colMatrixLeft(:,1) = colAvgLeft(:,1) ./ colAvgLeft(:,2);
         colMatrixRight(:,1) = colAvgRight(:,1) ./ colAvgRight(:,2);
         
-        % Gets the text label for the current frequency
-        
         % Cycles through all the views
         for vNum = 1:number_of_views
             vNum
@@ -193,9 +185,6 @@ for tNum = time_value:time_end
             pause(1);
         end
     end
-end
-if save_video == 1
-    close(v);
 end
 fprintf('I am done!!!')
 toc
