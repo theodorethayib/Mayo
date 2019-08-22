@@ -49,6 +49,8 @@ specific_time_end = 44;
 word_on_time = 8;
 word_off_time = 37;
 
+fig_bg_color = [0.8 0.8 0.8];
+
 % Set save_picture to 1 if picture is to be saved, 0 if not.
 % pic_export_folder is the folder where the exported pictures will be
 % saved.
