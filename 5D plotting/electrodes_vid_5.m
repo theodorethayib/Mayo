@@ -43,7 +43,7 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % times.
 use_specific_time = 1;
 specific_time_start = 6;
-specific_time_end = 6;
+specific_time_end = 44;
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
@@ -60,6 +60,7 @@ frame_rate = 5;
 % saved.
 save_picture = 1;
 pic_export_folder = '/home/michal/MATLAB/projects/Mayo/trunk/5D plotting/pic_exports';
+% pic_export_folder = '/Users/localadmin/Documents/MATLAB/5D plotting_new_new/5D plotting/pic_exports';
 
 % Loads required data.
 load('all_loc.mat');
@@ -69,29 +70,6 @@ load('IPtime2.mat');
 load('patients.mat');
 vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
 fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
-
-
-% CBar loads the colorbar, and fig_bg_color sets the figure's background
-% color.
-CBar = imread('Colorbar_new3.png');
-fig_bg_color = [0.8 0.8 0.8];
-
-% Frequency legend text.
-f1 = '\theta_{L}                ';
-f2 = '\theta_{H}                ';
-f3 = '\alpha                 ';
-f4 = '\beta                  ';
-f5 = '\gamma_{L}                ';
-f6 = '\gamma_{H}                ';
-
-font_size = 32; % Frequency legend text font size
-
-% Prepares the video file
-if save_video == 1
-    v = VideoWriter(vid_name);
-    v.FrameRate = frame_rate;
-    open(v);
-end
 
 % Creates a maximized figure with the background color specified above, and
 % sets matlab to use OpenGL.
