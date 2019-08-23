@@ -1,27 +1,18 @@
 % DESCRIPTION:
-%   Plots electrodes directly onto a brain surface using
-%   vertex3d_withAvailROI.m and brain data from BRAIN_SCHEME.mat
+%   Combines all individual brains from brainplot_avg_elec_on_surface.m
+%   onto a single figure.
 % 
 % REQUIRED FILES
-%   (1) all_loc.mat = [x y z] location of all electrodes
-%        all_loc(patients{1}) will give all electrode [x y z] for patient 1 
-%   (2)BRAIN_SCHEME.mat = vectors and faces to plot the left and right
-%   sides of the brain.
-%   (3) hemispheres.mat = hemisphere for all electrodes (1) for left, (0)
-%   for right
-%        hemispheres(patients{1}) will show which hemipshere all electrodes
-%        for patient 1 are in
-%   (4) IPtime2.mat = IP values for each electrode at each frequency at
-%   each time point for each patient
-%   (5) patients.mat = key of patient indentifiers
-%   (6) myJet.m = color map for electrode coloring
-%   (7) time_graph.m = plots the time graphs at the bottom and bottom of
+%   (1) individual brains from brainplot_avg_elec_on_surface.m 
+%       Brains must be using the format
+%       time_timenumber_frequencynumber_viewnumber
+%       Empty brains are time 0
+%   (2) time_graph.m = plots the time graphs at the bottom and bottom of
 %   the figures
-%   (8) subtightplot.m = allows for the brain surface subplots to be
-%   closer together
-%   (9) vertex3d_withAvailROI.m = plots a brain surface colored based off
-%   electrodes within a ROI
-%   (10) Colorbar_new3.png = png file for the colorbar
+%   (3) Colorbar_new3.png = png file for the colorbar
+% 
+% Written by Theodore Thayib (theodore.thayib@gmail.com)
+% Modifications:
 % 
 
 % VARIABLES
@@ -29,10 +20,6 @@ tic
 number_of_time = 44; % Total number of time frames within the data.
 number_of_frequencies = 6; % Total number of frequencies.
 number_of_views = 5; % Total number of views.
-number_of_patients = 139; % Total number of patients.
-number_of_empty_frames = 4; % Total number of empty frames at the beginning and end of the video.
-min_ip_threshold = 0.05; % Minimum threshold for IP values to be plotted
-max_ip_threshold = 0.5; % Maximum threshold for IP value colors
 
 % Distance from a brain surface that will be included in it's color
 % calculations.
@@ -42,8 +29,8 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % specific_time_start and specific_time_end. If not, it will plot all
 % times.
 use_specific_time = 1;
-specific_time_start = 6;
-specific_time_end = 44;
+specific_time_start = 0;
+specific_time_end = 0;
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
@@ -51,7 +38,7 @@ word_off_time = 37;
 
 % Set save_video to 1 if video is to be saved, 0 if not. vid_name is the
 % name of the exported video. frame_rate is the framerate of the video
-save_video = 0;
+save_video = 1;
 vid_name = 'VidExport_BSurfacePlotTest_3.avi';
 frame_rate = 5;
 
@@ -59,17 +46,7 @@ frame_rate = 5;
 % pic_export_folder is the folder where the exported pictures will be
 % saved.
 save_picture = 1;
-pic_export_folder = '/home/michal/MATLAB/projects/Mayo/trunk/5D plotting/pic_exports';
-
-% Loads required data.
-load('all_loc.mat');
-load('BRAIN_SCHEME.mat');
-load('hemispheres.mat');
-load('IPtime2.mat');
-load('patients.mat');
-vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
-fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
-
+pic_export_folder = '/Users/localadmin/Documents/MATLAB/5D plotting_new_new/5D plotting/pic_exports';
 
 % CBar loads the colorbar, and fig_bg_color sets the figure's background
 % color.
@@ -77,12 +54,12 @@ CBar = imread('Colorbar_new3.png');
 fig_bg_color = [0.8 0.8 0.8];
 
 % Frequency legend text.
-f1 = '\theta_{L}                ';
-f2 = '\theta_{H}                ';
-f3 = '\alpha                 ';
-f4 = '\beta                  ';
-f5 = '\gamma_{L}                ';
-f6 = '\gamma_{H}                ';
+f1 = '{\newline\newline\theta_{L}                }';
+f2 = '{\newline\newline\theta_{H}                }';
+f3 = '{\newline\newline\alpha                 }';
+f4 = '{\newline\newline\beta                  }';
+f5 = '{\newline\newline\gamma_{L}                }';
+f6 = '{\newline\newline\gamma_{H}                }';
 
 font_size = 32; % Frequency legend text font size
 
@@ -105,7 +82,7 @@ if use_specific_time == 1
     time_value = specific_time_start;
     time_end = specific_time_end;
 else
-    time_value = 1;
+    time_value = 0;
     time_end = number_of_time;
 end
 
@@ -160,7 +137,7 @@ for tNum = time_value:time_end
             fullCurrentPicture = imread(fullCurrentPictureName);
             imshow(fullCurrentPicture);
             if vNum == 1
-                text(-3,2,frequency_legend, 'FontSize', font_size, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
+                text(-3,2,frequency_legend, 'FontSize', font_size, 'HorizontalAlignment', 'right');
             end
             
             camlight; 
@@ -171,34 +148,26 @@ for tNum = time_value:time_end
         end
     end
     hold off;
-    fprintf('one ')
     pause(1);
-    fprintf('two ')
-%     drawnow;
     % If save_video is on, save the figure as the set number of frames in
     % the video.
     if save_video == 1
         frame = getframe(gcf);
         writeVideo(v,frame);
     end
-    fprintf('three ')
     % If save_picture is on, save the figure as a png file
+    % Figures are saved onto a time_timenumber format.
     if save_picture == 1
         pngFileName = sprintf('time_%d.png', tNum);
         fullFileName = fullfile(pic_export_folder, pngFileName);
-    %     saveas(gcf,fullFileName);
         export_fig(fullFileName);
     end
-    fprintf('four ')
     pause(1);
-    fprintf('five ')
     clf
-    fprintf('six ')
     pause(1);
-    fprintf('seven ')
 end
 if save_video == 1
     close(v);
 end
-fprintf('I am done!!!')
+fprintf('Done. ')
 toc
