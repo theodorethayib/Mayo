@@ -30,7 +30,7 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % times.
 use_specific_time = 1;
 specific_time_start = 0;
-specific_time_start = 0;
+specific_time_start = 44;
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
