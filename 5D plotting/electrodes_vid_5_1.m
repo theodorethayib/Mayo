@@ -29,10 +29,6 @@ tic
 number_of_time = 44; % Total number of time frames within the data.
 number_of_frequencies = 6; % Total number of frequencies.
 number_of_views = 5; % Total number of views.
-number_of_patients = 139; % Total number of patients.
-number_of_empty_frames = 4; % Total number of empty frames at the beginning and end of the video.
-min_ip_threshold = 0.05; % Minimum threshold for IP values to be plotted
-max_ip_threshold = 0.5; % Maximum threshold for IP value colors
 
 % Distance from a brain surface that will be included in it's color
 % calculations.
@@ -43,7 +39,7 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % times.
 use_specific_time = 1;
 specific_time_start = 6;
-specific_time_end = 44;
+specific_time_end = 6;
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
