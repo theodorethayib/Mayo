@@ -11,7 +11,7 @@
 %   the figures
 %   (3) Colorbar_new3.png = png file for the colorbar
 % 
-% Written by Theodore Thayib (theodore.thayib@gmail.com)
+% Written by Theodore Thayib (theodore.thayib@gmail.com).
 % Modifications:
 % 
 

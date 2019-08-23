@@ -20,7 +20,7 @@
 %   electrodes within a ROI
 %   (8) export_fig suite for saving electrodes.
 % 
-% Written by Theodore Thayib (tpt8899@gmail.com).
+% Written by Theodore Thayib (theodore.thayib@gmail.com).
 % Modificiations:
 %   
 
