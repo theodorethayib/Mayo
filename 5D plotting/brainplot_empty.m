@@ -27,6 +27,9 @@ function brainplot_empty(number_of_frequencies, number_of_views, number_of_time,
 %   plotted
 %   (18) font_size = font size for the frequency legend
 % 
+% Written by Theodore Thayib (tpt8899@gmail.com).
+% Modificiations:
+%  
 
 
 % Upper time graph

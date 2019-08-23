@@ -16,6 +16,9 @@ function brainplot_with_electrodes(vectors, faces, brain_color, elec_matrix, cir
 %   the color of the electrode.
 %   (5) circle_size = marker size for plotting each electrode.
 % 
+% Written by Theodore Thayib (tpt8899@gmail.com).
+% Modificiations:
+%  
 
 plotsurf_wrapper(vectors, faces, brain_color);
     for vectRowNum = 1:size(elec_matrix,1)
