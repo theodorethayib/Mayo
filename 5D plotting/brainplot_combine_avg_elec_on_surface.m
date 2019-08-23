@@ -29,8 +29,13 @@ plotThreshold = 4; % Use 4 if no weighted average, 5 if weighted average (distan
 % specific_time_start and specific_time_end. If not, it will plot all
 % times.
 use_specific_time = 1;
+<<<<<<< HEAD:5D plotting/brainplot_combine_avg_elec_on_surface.m
 specific_time_start = 0;
 specific_time_end = 0;
+=======
+specific_time_start = 6;
+specific_time_end = 6;
+>>>>>>> dc3b3a9e0b976efb55e32ec850fd98d57871261a:5D plotting/electrodes_vid_5_1.m
 
 % Time for when word is on/off during the test.
 word_on_time = 8;
@@ -47,6 +52,19 @@ frame_rate = 5;
 % saved.
 save_picture = 1;
 pic_export_folder = '/Users/localadmin/Documents/MATLAB/5D plotting_new_new/5D plotting/pic_exports';
+<<<<<<< HEAD:5D plotting/brainplot_combine_avg_elec_on_surface.m
+=======
+
+% Loads required data.
+load('all_loc.mat');
+load('BRAIN_SCHEME.mat');
+load('hemispheres.mat');
+load('IPtime2.mat');
+load('patients.mat');
+vL = BRAIN_SCHEME{1};vR = BRAIN_SCHEME{3};
+fL = BRAIN_SCHEME{2};fR = BRAIN_SCHEME{4};
+
+>>>>>>> dc3b3a9e0b976efb55e32ec850fd98d57871261a:5D plotting/electrodes_vid_5_1.m
 
 % CBar loads the colorbar, and fig_bg_color sets the figure's background
 % color.
@@ -169,5 +187,9 @@ end
 if save_video == 1
     close(v);
 end
+<<<<<<< HEAD:5D plotting/brainplot_combine_avg_elec_on_surface.m
 fprintf('Done. ')
+=======
+fprintf('I am done!!!')
+>>>>>>> dc3b3a9e0b976efb55e32ec850fd98d57871261a:5D plotting/electrodes_vid_5_1.m
 toc
