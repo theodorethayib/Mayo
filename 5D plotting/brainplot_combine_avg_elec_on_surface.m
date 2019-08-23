@@ -41,6 +41,7 @@ word_off_time = 37;
 save_video = 1;
 vid_name = 'VidExport_BSurfacePlotTest_3.avi';
 frame_rate = 5;
+number_of_empty_frames = 4;
 
 % Set save_picture to 1 if picture is to be saved, 0 if not.
 % pic_export_folder is the folder where the exported pictures will be
@@ -154,6 +155,11 @@ for tNum = time_value:time_end
     if save_video == 1
         frame = getframe(gcf);
         writeVideo(v,frame);
+    end
+    if tNum == 1
+        for eFrame = 2:number_of_empty_frames
+            writeVideo(v,frame);
+        end
     end
     % If save_picture is on, save the figure as a png file
     % Figures are saved onto a time_timenumber format.
