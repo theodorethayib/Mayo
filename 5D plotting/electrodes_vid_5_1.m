@@ -55,7 +55,7 @@ frame_rate = 5;
 % pic_export_folder is the folder where the exported pictures will be
 % saved.
 save_picture = 1;
-pic_export_folder = '/home/michal/MATLAB/projects/Mayo/trunk/5D plotting/pic_exports';
+pic_export_folder = '/Users/localadmin/Documents/MATLAB/5D plotting_new_new/5D plotting/pic_exports';
 
 % Loads required data.
 load('all_loc.mat');
