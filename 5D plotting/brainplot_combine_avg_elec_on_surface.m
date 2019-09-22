@@ -152,12 +152,13 @@ for tNum = time_value:time_end
     pause(1);
     % If save_video is on, save the figure as the set number of frames in
     % the video.
-    if save_video == 1
-        frame = getframe(gcf);
-        writeVideo(v,frame);
-    end
-    if tNum == 1
+    if tNum == 0
         for eFrame = 2:number_of_empty_frames
+            writeVideo(v,frame);
+        end
+    else
+        if save_video == 1
+            frame = getframe(gcf);
             writeVideo(v,frame);
         end
     end
