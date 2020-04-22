@@ -103,7 +103,7 @@ for tNum = time_value:time_end
             % Cycles through all electrodes for the current patient
             for eNum = 1:size(IPvalue_matrix,1)
                 IPvalue = IPvalue_matrix(eNum, 1); % Gets IP value for the current electrode
-                if IPvalue > min_ip_threshold || IPvalue < min_ip_threshold % Checks to see if electrode is within threshold
+                if IPvalue > min_ip_threshold || IPvalue < (min_ip_threshold * -1) % Checks to see if electrode is within threshold
                     IPvalue = IPvalue * 2; % Sets IP value to conform with vertex3d color scale
                     if IPvalue >= 1 % Sets all IP values outside of the maximum threshold to the highest color
                         IPvalue = 0.99;
